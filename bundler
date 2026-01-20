@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+use CodesVault\Bundle\Bundler;
+
+require __DIR__ . "/vendor/autoload.php";
+
+$bundler = new Bundler(__DIR__);
+
+$bundler
+    ->createProductionRepo('deep-search')
+    ->command("composer install --no-dev")
+    ->command("npm install")
+    ->command("npm run build:block")
+    ->cleanUp()
+    ->zip('deep-search')
+    ->executionTime();

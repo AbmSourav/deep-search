@@ -7,6 +7,9 @@
             "named_class": true
         }
     },
+    "include": [
+        
+    ],
 	"exclude": [
 		"vendor/",
 		"node_modules/"
