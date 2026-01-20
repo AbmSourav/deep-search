@@ -1,0 +1,15 @@
+{
+    "name": "abmsourav/deep-search",
+    "description": "Search plugin",
+    "autoload": {
+        "psr-4": {
+            "DeepSearch\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Keramot UL Islam"
+        }
+    ],
+    "require": {}
+}
