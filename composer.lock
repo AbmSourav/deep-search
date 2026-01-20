@@ -1,0 +1,151 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "5004f8b8b640145665c382a1d1c25c2b",
+    "packages": [
+        {
+            "name": "codesvault/howdy-qb",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CodesVault/howdy_qb.git",
+                "reference": "07c058c8219bc59233813e5941251a4937fa02f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/07c058c8219bc59233813e5941251a4937fa02f3",
+                "reference": "07c058c8219bc59233813e5941251a4937fa02f3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.23",
+                "phpcompatibility/php-compatibility": "^9.3",
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "^3.7",
+                "symfony/var-dumper": "^5.4",
+                "vlucas/phpdotenv": "^5.6",
+                "wp-coding-standards/wpcs": "^2.3",
+                "wp-phpunit/wp-phpunit": "^6.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CodesVault\\Howdyqb\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CodesVault",
+                    "email": "codesvault@gmail.com"
+                },
+                {
+                    "name": "Keramot UL Islam",
+                    "email": "keramotul.islam@gmail.com"
+                }
+            ],
+            "description": "Mysql Query Builder for WordPress",
+            "keywords": [
+                "builder",
+                "database",
+                "mysql",
+                "mysqli",
+                "pdo",
+                "query",
+                "query builder",
+                "wordpress",
+                "wp"
+            ],
+            "support": {
+                "issues": "https://github.com/CodesVault/howdy_qb/issues",
+                "source": "https://github.com/CodesVault/howdy_qb/tree/2.1.1"
+            },
+            "time": "2026-01-04T12:30:16+00:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "laravel/pint",
+            "version": "v1.20.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/pint.git",
+                "reference": "53072e8ea22213a7ed168a8a15b96fbb8b82d44b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/53072e8ea22213a7ed168a8a15b96fbb8b82d44b",
+                "reference": "53072e8ea22213a7ed168a8a15b96fbb8b82d44b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-tokenizer": "*",
+                "ext-xml": "*",
+                "php": "^8.1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.66.0",
+                "illuminate/view": "^10.48.25",
+                "larastan/larastan": "^2.9.12",
+                "laravel-zero/framework": "^10.48.25",
+                "mockery/mockery": "^1.6.12",
+                "nunomaduro/termwind": "^1.17.0",
+                "pestphp/pest": "^2.36.0"
+            },
+            "bin": [
+                "builds/pint"
+            ],
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "App\\": "app/",
+                    "Database\\Seeders\\": "database/seeders/",
+                    "Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nuno Maduro",
+                    "email": "enunomaduro@gmail.com"
+                }
+            ],
+            "description": "An opinionated code formatter for PHP.",
+            "homepage": "https://laravel.com",
+            "keywords": [
+                "format",
+                "formatter",
+                "lint",
+                "linter",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/pint/issues",
+                "source": "https://github.com/laravel/pint"
+            },
+            "time": "2025-01-14T16:20:53+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
+}

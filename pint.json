@@ -1,0 +1,14 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "control_structure_braces": false,
+        "new_with_parentheses": {
+            "anonymous_class": true,
+            "named_class": true
+        }
+    },
+	"exclude": [
+		"vendor/",
+		"node_modules/"
+	]
+}

@@ -1,0 +1,20 @@
+{
+    "name": "deep-search",
+    "version": "1.0.0",
+    "description": "Search plugin for WordPress",
+    "main": "index.js",
+    "scripts": {
+        "build:admin": "wp-scripts build resources/admin/app.js --output-path=build",
+        "build:block": "wp-scripts build resources/block/src/index.js --output-path=resources/block/build",
+        "start": "NODE_ENV=development wp-scripts start resources/admin/app.js --output-path=build",
+        "start:admin:hot": "NODE_ENV=development wp-scripts start resources/admin/app.js --output-path=build --hot",
+        "dev": "npm run start:admin:hot"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@wordpress/scripts": "^31.1.0",
+        "autoprefixer": "^10.4.23",
+        "postcss": "^8.5.6"
+    }
+}

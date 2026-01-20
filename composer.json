@@ -1,9 +1,13 @@
 {
     "name": "abmsourav/deep-search",
     "description": "Search plugin",
+	"scripts": {
+		"format:check": "pint --config pint.json --verbose --test",
+		"format": "pint --config pint.json --verbose"
+	},
     "autoload": {
         "psr-4": {
-            "DeepSearch\\": "app/"
+            "DeepSearch\\App\\": "app/"
         }
     },
     "authors": [
@@ -11,5 +15,10 @@
             "name": "Keramot UL Islam"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "laravel/pint": "^1.20"
+    },
+    "require": {
+        "codesvault/howdy-qb": "^2.1"
+    }
 }

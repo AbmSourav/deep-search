@@ -1,0 +1,11 @@
+{
+  "apiVersion": 3,
+  "name": "deep-search/search-block",
+  "title": "Deep Search",
+  "category": "widgets",
+  "icon": "search",
+  "description": "Search block",
+  "editorScript": "file:../build/index.js",
+  "viewScript": "file:../deep-search.js",
+  "style": "file:../build/style-index.css"
+}
