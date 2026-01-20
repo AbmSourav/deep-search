@@ -23,7 +23,16 @@ class Block implements BaseService
             return;
         }
 
-        register_block_type(DS_PLUGIN_DIR . 'resources/block/src', []);
+        register_block_type(DS_PLUGIN_DIR . 'resources/block/src', [
+            'render_callback' => [$this, 'renderBlock']
+        ]);
+    }
+
+    public function renderBlock(array $blockAttributes, string $content)
+    {
+        ob_start();
+        include DS_PLUGIN_DIR . 'resources/block/view.php';
+        return ob_get_clean();
     }
 
     // public function localizeBlockScript()

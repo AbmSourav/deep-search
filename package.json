@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build:admin": "wp-scripts build resources/admin/app.js --output-path=build",
+        "dev:block": "wp-scripts start resources/block/src/index.js --output-path=resources/block/build",
         "build:block": "wp-scripts build resources/block/src/index.js --output-path=resources/block/build",
         "start": "NODE_ENV=development wp-scripts start resources/admin/app.js --output-path=build",
         "start:admin:hot": "NODE_ENV=development wp-scripts start resources/admin/app.js --output-path=build --hot",
