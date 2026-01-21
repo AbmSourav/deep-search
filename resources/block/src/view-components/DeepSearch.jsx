@@ -17,22 +17,31 @@ const DeepSearch = ({ props }) => {
             {focusStatus &&
                 (<div className="ds-overlay" onClick={() => setFocusStatus(false)}></div>)
             }
-            <SearchBar
-            props={props}
-            setFocusStatus={setFocusStatus}
-            queryData={queryData}
-            setQueryRes={setQueryRes}
-            />
-            <SearchOptions
-            props={props}
-            focusStatus={focusStatus}
-            queryData={queryData}
-            setQueryData={setQueryData}
-            />
 
-            <PostList
-            queryRes={queryRes}
-            />
+            {Object.keys(queryRes).length === 0 &&
+                <SearchBar
+                props={props}
+                setFocusStatus={setFocusStatus}
+                queryData={queryData}
+                setQueryRes={setQueryRes}
+                />
+            }
+
+            {focusStatus && !queryRes?.loading && Object.keys(queryRes).length === 0 &&
+                <SearchOptions
+                props={props}
+                queryData={queryData}
+                setQueryData={setQueryData}
+                />
+            }
+
+            {focusStatus && (queryRes?.loading || Object.keys(queryRes).length > 0) &&
+                <PostList
+                queryRes={queryRes}
+                setQueryRes={setQueryRes}
+                setQueryData={setQueryData}
+                />
+            }
         </div>
     )
 }

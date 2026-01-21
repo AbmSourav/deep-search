@@ -1,11 +1,7 @@
 import Select from 'react-select';
 
-const SearchOptions = ({ props, focusStatus, queryData, setQueryData }) => {
+const SearchOptions = ({ props, queryData, setQueryData }) => {
     const { postTypes, categories, tags } = props
-
-    if (!focusStatus) {
-        return
-    }
 
     const handlePostTypleChange = (postTypes) => {
         let postTypesData = ''

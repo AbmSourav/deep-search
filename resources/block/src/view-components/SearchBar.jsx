@@ -28,6 +28,8 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryRes }) => {
             return
         }
 
+        setQueryRes({loading: true})
+
         const query = {...queryData, s: searchKey, currentPage}
         console.log('query', query)
 
@@ -59,6 +61,7 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryRes }) => {
                 value={searchKey}
                 className="ds-input"
                 name="ds_input"
+                placeholder='Search...'
                 />
                 <div className="ds-icon">
                     {searchKey &&
