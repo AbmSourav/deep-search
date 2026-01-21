@@ -5,8 +5,8 @@
     "main": "index.js",
     "scripts": {
         "build:admin": "wp-scripts build resources/admin/app.js --output-path=build",
-        "dev:block": "wp-scripts start resources/block/src/index.js --output-path=resources/block/build",
-        "build:block": "wp-scripts build resources/block/src/index.js --output-path=resources/block/build",
+        "dev:block": "wp-scripts start resources/block/src/index.js resources/block/src/view.js --output-path=resources/block/build",
+        "build:block": "wp-scripts build resources/block/src/index.js resources/block/src/view.js --output-path=resources/block/build",
         "start": "NODE_ENV=development wp-scripts start resources/admin/app.js --output-path=build",
         "start:admin:hot": "NODE_ENV=development wp-scripts start resources/admin/app.js --output-path=build --hot",
         "dev": "npm run start:admin:hot"
@@ -17,5 +17,8 @@
         "@wordpress/scripts": "^31.1.0",
         "autoprefixer": "^10.4.23",
         "postcss": "^8.5.6"
+    },
+    "dependencies": {
+        "react-select": "^5.10.2"
     }
 }

@@ -6,6 +6,6 @@
   "icon": "search",
   "description": "Search block",
   "editorScript": "file:../build/index.js",
-  "viewScript": "file:./deep-search.js",
+  "viewScript": "file:../build/view.js",
   "style": "file:../build/style-index.css"
 }

@@ -11,18 +11,15 @@
         box-shadow: 1px 2px 2px #2828284f;
 
     }
-    .ds-separator {
-        display: none;
-    }
 
-    &.active {
-
-        .ds-wrap {
-            position: absolute;
-            padding: 5px 0 5px;
-            box-shadow: 1px 2px 8px #2828284f;
-            border-radius: 4px 4px 15px 15px;
-        }
+    .ds-wrap.active {
+        width: 100%;
+        padding: 5px 0 5px;
+        box-shadow: 1px 2px 8px #2828284f;
+        border-radius: 4px 4px 15px 15px;
+        background: #fff;
+        z-index: 2;
+        position: absolute;
 
         .ds-bar {
             border: none;
@@ -32,10 +29,13 @@
             border-top-right-radius: 5px;
         }
 
-        .ds-separator {
-            display: block;
-            border: 1px solid #e2e2e2;
-            width: 95%;
+        .ds-overlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: -1;
         }
     }
 
@@ -55,38 +55,46 @@
     }
 
     .ds-icon {
-        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        cursor: pointer;
 
         svg {
             width: 22px;
             height: 22px;
         }
 
-        &__search {
-            &.hide {
-                display: none;
-            }
-        }
-
+        &__search,
         &__clear {
-            display: none;
-
-            &.show {
-                display: inline-block;
-                cursor: pointer;
-            }
+            display: flex;
+        }
+        &__clear {
+            fill: #aaaaaa;
+            margin-right: 8px;
         }
     }
 
     .ds-options {
-        display: none;
-        opacity: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        width: auto;
+        opacity: 1;
+        margin: 5px 15px 15px;
+        padding: 25px 10px;
+        border-top: 1px solid #e2e2e2;
 
-        &.show {
-            display: block;
-            width: auto;
-            opacity: 1;
-            padding: 15px;
+        &__pt,
+        &__cat,
+        &__tag {
+            font-size: 14px;
+
+            .ds__control,
+            .ds__control:hover {
+                border-color: #aeaeae;
+                box-shadow: 0 0 0 1px #b4b4b4;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a4801b6b9f485514e0705aea8ffd3909",
+    "content-hash": "d39267322fe471502ce8d513702f2db9",
     "packages": [
         {
             "name": "codesvault/howdy-qb",
@@ -70,6 +70,63 @@
                 "source": "https://github.com/CodesVault/howdy_qb/tree/2.1.1"
             },
             "time": "2026-01-04T12:30:16+00:00"
+        },
+        {
+            "name": "codesvault/validator",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CodesVault/validator.git",
+                "reference": "63d570307fb43bbed2a057ab75a160de8a6f8d67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CodesVault/validator/zipball/63d570307fb43bbed2a057ab75a160de8a6f8d67",
+                "reference": "63d570307fb43bbed2a057ab75a160de8a6f8d67",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "pestphp/pest": "^1.23"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Codesvault\\Validator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CodesVault",
+                    "email": "codesvalut@gmail.com"
+                },
+                {
+                    "name": "Keramot UL Islam (AbmSourav)",
+                    "email": "keramotul.islam@gmail.com",
+                    "homepage": "https://abmsourav.com"
+                }
+            ],
+            "description": "Data validation library",
+            "keywords": [
+                "Php Validator",
+                "codesvalut",
+                "data validation",
+                "data validator",
+                "php validation",
+                "validation",
+                "validator"
+            ],
+            "support": {
+                "issues": "https://github.com/CodesVault/validator/issues",
+                "source": "https://github.com/CodesVault/validator/tree/1.2.1"
+            },
+            "time": "2025-12-23T10:39:30+00:00"
         }
     ],
     "packages-dev": [
