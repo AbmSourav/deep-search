@@ -94,8 +94,16 @@ class SearchConfigs implements BaseService
             ], 403);
         }
 
+        $configs = get_option('ds_configs');
+        if (! $configs) {
+            $configs = [
+                'posts_per_page'  => 5,
+                'show_pagination' => 1
+            ];
+        }
+
         wp_send_json_success([
-            'configs' => get_option('ds_configs'),
+            'configs' => $configs,
         ]);
     }
 }

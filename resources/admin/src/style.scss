@@ -1,7 +1,16 @@
 #ds-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    position: relative;
     margin-top: 50px;
+
+    .components-notice {
+        width: 55.5%;
+        position: absolute !important;
+        top: -10px;
+    }
 
     .ds-configs {
         display: flex;

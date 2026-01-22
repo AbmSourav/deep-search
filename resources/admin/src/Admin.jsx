@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ToggleControl, Button, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { ToggleControl, Button, Notice, __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const Admin = () => {
     const [ showPagination, setShowPagination ] = useState(true)
     const [ postPerPage, setPostPerPage ] = useState(5)
     const [ isSubmitting, setisSubmitting ] = useState(false)
+    const [ notice, setNotice ] = useState({ show: false, type: '', message: '' });
 
     useEffect(() => {
         const form = new FormData()
@@ -49,7 +50,11 @@ const Admin = () => {
         })
         .then((res => res.json()))
         .then(data => {
-            console.log('res', data)
+            setNotice({
+                show: true,
+                type: 'success',
+                message: __('Configurations updated', 'deep-search')
+            });
         })
         .catch(error => {
             console.error(error)
@@ -58,6 +63,18 @@ const Admin = () => {
     }
 
     return (
+        <>
+        {notice.show && (
+            <Notice
+            status={notice.type}
+            isDismissible={true}
+            onRemove={() => setNotice({ show: false, type: '', message: '' })}
+            className='mb-4'
+            >
+                {notice.message}
+            </Notice>
+        )}
+
         <div className="ds-configs">
             <h2>{__('Configurations', 'deep-search')}</h2>
 
@@ -94,6 +111,7 @@ const Admin = () => {
                 {__('Save', 'deep-search')}
             </Button>
         </div>
+        </>
     )
 }
 

@@ -52,7 +52,6 @@ deep-search/
 │   └── block/                         # Gutenberg block assets
 │       ├── src/                       # Block source files
 │       │   ├── index.js               # Block entry point
-│       │   ├── block.json             # Block configuration
 │       │   ├── edit.js                # Block editor component
 │       │   ├── style.scss             # Block styles
 │       │   ├── view.js                # Frontend view entry
@@ -61,6 +60,7 @@ deep-search/
 │       │       ├── SearchBar.jsx      # Search input component
 │       │       ├── SearchOptions.jsx  # Search options component
 │       │       └── PostList.jsx       # Search results component
+│       ├── block.json                 # Block configuration
 │       ├── build/                     # Compiled block assets
 │       └── view.php                   # Block render template
 ├── vendor/                            # Composer dependencies

@@ -26,7 +26,7 @@ class Block implements BaseService
             return;
         }
 
-        register_block_type(DS_PLUGIN_DIR . 'resources/block/src', [
+        register_block_type(DS_PLUGIN_DIR . 'resources/block', [
             'render_callback' => [$this, 'renderBlock']
         ]);
     }
@@ -201,7 +201,15 @@ class Block implements BaseService
 
         $nextPage = 0;
         $prevPage = 0;
-        if (! empty($searchConfigs['show_pagination']) && $searchConfigs['show_pagination']) {
+        // default configs
+        if (! $searchConfigs) {
+            if ($queryParams['currentPage'] < $query->max_num_pages) {
+                $nextPage = $queryParams['currentPage'] + 1;
+            }
+            $prevPage = $queryParams['currentPage'] - 1;
+        }
+        // after config is set by user
+        if ($searchConfigs && isset($searchConfigs['show_pagination']) && $searchConfigs['show_pagination']) {
             if ($queryParams['currentPage'] < $query->max_num_pages) {
                 $nextPage = $queryParams['currentPage'] + 1;
             }
