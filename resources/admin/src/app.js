@@ -5,7 +5,6 @@ import './style.scss';
 
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.querySelector('#ds-container');
-    console.log('container', container)
 
     if (container) {
         const root = createRoot(container);

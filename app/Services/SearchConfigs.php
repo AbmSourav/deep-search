@@ -35,7 +35,7 @@ class SearchConfigs implements BaseService
         if ($errors) {
             wp_send_json_error([
                 'message' => 'Validation error',
-                'errors' => $errors
+                'errors'  => $errors
             ], 403);
         }
 
@@ -58,8 +58,8 @@ class SearchConfigs implements BaseService
             'show_pagination' => sanitize_text_field($showPagination)
         ]);
 
-         wp_send_json_success([
-            'message' => 'Configs stored',
+        wp_send_json_success([
+           'message' => 'Configs stored',
         ]);
     }
 
@@ -67,8 +67,8 @@ class SearchConfigs implements BaseService
     {
         $validator = Validator::validate(
             [
-                'nonce'   => 'required|string',
-                'action'  => 'required|stringOnly',
+                'nonce'  => 'required|string',
+                'action' => 'required|stringOnly',
             ],
             $_POST
         );
@@ -77,7 +77,7 @@ class SearchConfigs implements BaseService
         if ($errors) {
             wp_send_json_error([
                 'message' => 'Validation error',
-                'errors' => $errors
+                'errors'  => $errors
             ], 403);
         }
 

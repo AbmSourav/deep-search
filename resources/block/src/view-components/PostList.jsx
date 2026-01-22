@@ -26,11 +26,10 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
         })
         .then((res => res.json()))
         .then(data => {
-            console.log('res', data)
             setQueryRes(data?.data)
         })
         .catch(error => {
-            console.log(error)
+            console.error(error)
         })
     }
 

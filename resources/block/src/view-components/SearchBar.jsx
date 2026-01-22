@@ -25,7 +25,6 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
 
     const handleSubmit = () => {
         if (!searchKey && isQueryDataEmpty()) {
-            console.log('req empty')
             return
         }
 
@@ -33,7 +32,6 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
 
         const query = {...queryData, s: searchKey, currentPage: 1}
         setQueryData(query)
-        console.log('query', queryData)
 
         const form = new FormData()
         form.append('action', 'search');
@@ -46,11 +44,10 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
         })
         .then((res => res.json()))
         .then(data => {
-            console.log('res', data)
             setQueryRes(data?.data)
         })
         .catch(error => {
-            console.log(error)
+            console.error(error)
         })
     }
 

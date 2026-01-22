@@ -134,7 +134,7 @@ class Block implements BaseService
         if ($errors) {
             wp_send_json_error([
                 'message' => 'Validation error',
-                'errors' => $errors
+                'errors'  => $errors
             ], 403);
         }
 

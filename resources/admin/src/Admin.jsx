@@ -31,14 +31,12 @@ const Admin = () => {
     }
 
     const handlePostPerPage = (value) => {
-        console.log('ppp', value)
         setPostPerPage(value)
     }
 
     const handleSubmit = () => {
         setisSubmitting(true)
         const configs = {postPerPage, showPagination}
-        console.log('button submit', configs)
 
         const form = new FormData()
         form.append('action', 'setConfigurations');
