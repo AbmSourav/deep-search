@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { __ } from '@wordpress/i18n';
 
-const SearchBar = ({ props, setFocusStatus, queryData, setQueryRes }) => {
+const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes }) => {
     const [ searchKey, setSearchKey ] = useState('')
     const [ currentPage, setCurrentPage ] = useState(1)
 
@@ -30,8 +31,9 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryRes }) => {
 
         setQueryRes({loading: true})
 
-        const query = {...queryData, s: searchKey, currentPage}
-        console.log('query', query)
+        const query = {...queryData, s: searchKey, currentPage: 1}
+        setQueryData(query)
+        console.log('query', queryData)
 
         const form = new FormData()
         form.append('action', 'search');
@@ -61,7 +63,7 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryRes }) => {
                 value={searchKey}
                 className="ds-input"
                 name="ds_input"
-                placeholder='Search...'
+                placeholder={__('Search...', 'deep-search')}
                 />
                 <div className="ds-icon">
                     {searchKey &&

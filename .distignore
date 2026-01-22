@@ -9,4 +9,5 @@ composer.lock
 
 pint.json
 
+resources/admin/src
 resources/block/src

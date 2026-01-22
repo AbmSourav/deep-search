@@ -1,3 +1,39 @@
+.block-editor-block-list__block {
+    .ds-bar {
+        display: flex;
+        border: 1px solid #cacaca;
+        align-items: center;
+        border-radius: 20px;
+        padding: 8px;
+        overflow: hidden;
+        box-shadow: 1px 2px 2px #2828284f;
+
+        .ds-input {
+            width: 100%;
+            padding: 10px;
+            margin: 0;
+            border: none;
+            font-size: 16px;
+            color: #3e3c3c;
+
+            &:active,
+            &:focus {
+                outline: none;
+                border: none;
+            }
+        }
+
+        .ds-icon {
+            margin: 8px 8px 2px 0;
+
+            svg {
+                width: 25px;
+                height: 25px;
+            }
+        }
+    }
+}
+
 .ds-root {
     position: relative;
 
@@ -6,7 +42,7 @@
         border: 1px solid #cacaca;
         align-items: center;
         border-radius: 20px;
-        padding: 4px;
+        padding: 8px;
         overflow: hidden;
         box-shadow: 1px 2px 2px #2828284f;
 
@@ -61,8 +97,8 @@
         cursor: pointer;
 
         svg {
-            width: 22px;
-            height: 22px;
+            width: 25px;
+            height: 25px;
         }
 
         &__search,
@@ -143,6 +179,23 @@
             &-date {
                 font-size: 14px;
                 color: #696969;
+            }
+        }
+
+        &__pagination {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+            gap: 8px;
+
+            &-btn {
+                background: #fff;
+                color: #4f4f4f;
+                border: 1px solid #027141;
+                border-radius: 5px;
+                padding: 3px 8px;
+                font-size: 12px;
+                cursor: pointer;
             }
         }
     }

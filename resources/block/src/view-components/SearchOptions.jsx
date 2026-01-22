@@ -1,15 +1,13 @@
 import Select from 'react-select';
+import { __ } from '@wordpress/i18n';
 
 const SearchOptions = ({ props, queryData, setQueryData }) => {
     const { postTypes, categories, tags } = props
 
     const handlePostTypleChange = (postTypes) => {
-        let postTypesData = ''
+        let postTypesData = []
         postTypes.map(postType => {
-            if (!postTypesData) {
-                return postTypesData = postType?.value
-            }
-            postTypesData += ', ' + postType?.value
+            postTypesData.push(postType.value)
         })
 
         queryData.postTypes = postTypesData
@@ -38,13 +36,12 @@ const SearchOptions = ({ props, queryData, setQueryData }) => {
 
     return (
         <div className="ds-options">
-            {console.log('changes>>', queryData)}
             {postTypes.length &&
                 <div className="ds-options__pt">
                     <Select
                     className="ds-options__pt-select"
                     classNamePrefix="ds"
-                    placeholder="Post type"
+                    placeholder={__("Post type", "deep-search")}
                     options={postTypes}
                     isMulti={true}
                     onChange={handlePostTypleChange}
@@ -57,7 +54,7 @@ const SearchOptions = ({ props, queryData, setQueryData }) => {
                     <Select
                     className="ds-options__cat-select"
                     classNamePrefix="ds"
-                    placeholder="Category"
+                    placeholder={__("Category", "deep-search")}
                     options={categories}
                     isMulti={true}
                     onChange={handleCatChange}
@@ -70,7 +67,7 @@ const SearchOptions = ({ props, queryData, setQueryData }) => {
                     <Select
                     className="ds-options__tag-select"
                     classNamePrefix="ds"
-                    placeholder="Tag"
+                    placeholder={__("Tag", "deep-search")}
                     options={tags}
                     isMulti={true}
                     onChange={handleTagChange}

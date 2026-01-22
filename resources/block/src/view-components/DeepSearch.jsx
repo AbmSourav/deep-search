@@ -11,11 +11,15 @@ const DeepSearch = ({ props }) => {
 
     const classNames = focusStatus ? 'ds-wrap active' : 'ds-wrap'
 
+    const handleCloseDropDown = () => {
+        setFocusStatus(false)
+        setQueryRes({})
+    }
+
     return (
         <div className={classNames}>
-            {console.log('props', props)}
             {focusStatus &&
-                (<div className="ds-overlay" onClick={() => setFocusStatus(false)}></div>)
+                (<div className="ds-overlay" onClick={handleCloseDropDown}></div>)
             }
 
             {Object.keys(queryRes).length === 0 &&
@@ -23,6 +27,7 @@ const DeepSearch = ({ props }) => {
                 props={props}
                 setFocusStatus={setFocusStatus}
                 queryData={queryData}
+                setQueryData={setQueryData}
                 setQueryRes={setQueryRes}
                 />
             }
@@ -37,9 +42,11 @@ const DeepSearch = ({ props }) => {
 
             {focusStatus && (queryRes?.loading || Object.keys(queryRes).length > 0) &&
                 <PostList
+                props={props}
                 queryRes={queryRes}
                 setQueryRes={setQueryRes}
                 setQueryData={setQueryData}
+                queryData={queryData}
                 />
             }
         </div>

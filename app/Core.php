@@ -6,6 +6,7 @@ use DeepSearch\App\Lib\SingleTon;
 use DeepSearch\App\Services\AdminMenu;
 use DeepSearch\App\Services\AssetsManager;
 use DeepSearch\App\Services\Block;
+use DeepSearch\App\Services\SearchConfigs;
 
 if (! defined('ABSPATH')) exit;
 
@@ -30,6 +31,7 @@ final class Core
         return [
             AssetsManager::class,
             AdminMenu::class,
+            SearchConfigs::class,
             Block::class,
         ];
     }

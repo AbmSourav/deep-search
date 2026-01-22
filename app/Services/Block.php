@@ -48,12 +48,6 @@ class Block implements BaseService
             'tags'       => $this->tagList(),
         ];
 
-        // echo "<pre>";
-        // print_r(get_tags([
-        //     'hide_empty' => 0
-        // ]));
-        // echo "</pre>";
-
         ob_start();
         include DS_PLUGIN_DIR . 'resources/block/view.php';
         return ob_get_clean();
@@ -169,7 +163,7 @@ class Block implements BaseService
         $args = [
             'post_status'    => 'publish',
             'posts_per_page' => 5,
-            'paged'          => $queryParams['currentPage'],
+            'paged'          => $queryParams['currentPage'] ?? 1,
         ];
 
         if (!empty($queryParams['postTypes'])) {
@@ -204,16 +198,18 @@ class Block implements BaseService
             wp_reset_postdata();
         }
 
-        $nextPage = false;
+        $nextPage = 0;
         if ($queryParams['currentPage'] < $query->max_num_pages) {
             $nextPage = $queryParams['currentPage'] + 1;
         }
+        $prevPage = $queryParams['currentPage'] - 1;
 
         return [
             'posts'      => $posts,
             'totalPosts' => $query->found_posts,
             'totalPage'  => $query->max_num_pages,
-            'nextPage'   => $nextPage
+            'nextPage'   => $nextPage,
+            'prevPage'   => $prevPage,
         ];
     }
 }

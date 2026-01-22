@@ -23,7 +23,7 @@ if (! defined('ABSPATH')) exit;
 
 define('DS_VERSION', '1.0.0');
 define('DS_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('DS_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('DS_PLUGIN_URL', plugins_url('/', __FILE__));
 
 require __DIR__ . '/vendor/autoload.php';
 
