@@ -76,7 +76,7 @@ const Admin = () => {
 
             <div className="ds-configs__config">
                 <div className="ds-configs__config-label">
-                    {__('Post per page', 'deep-search')}
+                    {__('Posts per page', 'deep-search')}
                 </div>
                 <NumberControl
                 value={postPerPage}

@@ -160,9 +160,10 @@ class Block implements BaseService
 
     private function query($queryParams)
     {
+        $searchConfigs = get_option('ds_configs');
         $args = [
             'post_status'    => 'publish',
-            'posts_per_page' => 5,
+            'posts_per_page' => $searchConfigs['posts_per_page'] ?? 5,
             'paged'          => $queryParams['currentPage'] ?? 1,
         ];
 
@@ -199,10 +200,13 @@ class Block implements BaseService
         }
 
         $nextPage = 0;
-        if ($queryParams['currentPage'] < $query->max_num_pages) {
-            $nextPage = $queryParams['currentPage'] + 1;
+        $prevPage = 0;
+        if (! empty($searchConfigs['show_pagination']) && $searchConfigs['show_pagination']) {
+            if ($queryParams['currentPage'] < $query->max_num_pages) {
+                $nextPage = $queryParams['currentPage'] + 1;
+            }
+            $prevPage = $queryParams['currentPage'] - 1;
         }
-        $prevPage = $queryParams['currentPage'] - 1;
 
         return [
             'posts'      => $posts,
