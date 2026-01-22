@@ -6,6 +6,8 @@ use Codesvault\Validator\Validator;
 use DeepSearch\App\Lib\BaseService;
 use DeepSearch\App\Lib\SingleTon;
 
+if (! defined('ABSPATH')) exit;
+
 class SearchConfigs implements BaseService
 {
     use SingleTon;

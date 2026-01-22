@@ -5,6 +5,8 @@ namespace DeepSearch\App\Services;
 use DeepSearch\App\Lib\BaseService;
 use DeepSearch\App\Lib\SingleTon;
 
+if (! defined('ABSPATH')) exit;
+
 class AssetsManager implements BaseService
 {
     use SingleTon;
