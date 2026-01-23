@@ -1,0 +1,49 @@
+#!/bin/bash
+
+CONTAINER="codesvault_phptest"
+PLUGIN_PATH="/var/www/html/wp-content/plugins/deep-search"
+
+# Usage: ./test [command] [args]
+# Commands:
+#   (no args)     - Sync files and run Pest
+#   copy <path>   - Copy a file/folder from host to container
+#   pull <path>   - Copy a file/folder from container to host
+#   pest [args]   - Run Pest with optional arguments
+#   exec <cmd>    - Execute a command in the container
+
+case "$1" in
+    copy)
+        if [ -z "$2" ]; then
+            echo "Usage: ./test copy <path>"
+            exit 1
+        fi
+        docker cp "$2" "$CONTAINER:$PLUGIN_PATH/$2"
+        docker exec -u root "$CONTAINER" chown -R docker:docker "$PLUGIN_PATH/$2"
+        echo "Copied $2 to container"
+        ;;
+    pull)
+        if [ -z "$2" ]; then
+            echo "Usage: ./test pull <path>"
+            exit 1
+        fi
+        docker cp "$CONTAINER:$PLUGIN_PATH/$2" "./$2"
+        echo "Pulled $2 from container"
+        ;;
+    pest)
+        shift
+        docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        ;;
+    exec)
+        shift
+        docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && $*"
+        ;;
+    *)
+        # Default: sync and run pest
+        docker cp ./tests "$CONTAINER:$PLUGIN_PATH/"
+        docker cp ./app "$CONTAINER:$PLUGIN_PATH/"
+        docker exec -u root "$CONTAINER" chown -R docker:docker "$PLUGIN_PATH/tests" "$PLUGIN_PATH/app"
+        docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        ;;
+esac
+
+exit 0
