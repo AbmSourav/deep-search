@@ -7,14 +7,15 @@ Search plugin for WordPress
 ## Environment Requirements
 
 * PHP >= 8.1
-* NodeJS >= 22.x
 * WordPress >= 6.8
+* PHP >= 8.3 (Only for test suite)
+* NodeJS >= 22.x (Only for development env)
 
 <br>
 
 ## Plugin Dev Environment Setup
 
-Install composer and npm packages, and build JavaScript
+Install composer and npm packages, and build JavaScript.
 
 ```bash
 composer install
@@ -24,6 +25,12 @@ npm install
 npm run build:admin
 npm run build:block
 ```
+
+<br>
+
+## Test
+
+For better test coverage, test suite need to be run on PHP-8.3. This can be done with a seperate docker container.
 
 <br>
 
@@ -63,10 +70,21 @@ deep-search/
 │       ├── block.json                 # Block configuration
 │       ├── build/                     # Compiled block assets
 │       └── view.php                   # Block render template
+├── tests/                             # Test files
+│   ├── Feature/                       # Feature tests
+│   │   └── AdminMenuTest.php          # Admin menu tests
+│   ├── Unit/                          # Unit tests
+│   │   └── CoreTest.php               # Core class tests
+│   ├── Pest.php                       # Pest configuration
+│   ├── TestCase.php                   # Base test case class
+│   └── _ide_helper.php                # IDE helper for tests
 ├── vendor/                            # Composer dependencies
+├── vendor-test/                       # Test-only dependencies (for IDE)
 ├── node_modules/                      # NPM dependencies
+├── test                               # Test runner script (Docker)
 ├── search.php                         # Plugin entry file
 ├── composer.json                      # PHP dependencies
+├── composerTest.json                  # Test dependencies config
 ├── package.json                       # JavaScript dependencies
 ├── bundler                            # WP Bundler configuration
 ├── pint.json                          # Laravel Pint config
