@@ -10,8 +10,14 @@ PLUGIN_PATH="/var/www/html/wp-content/plugins/deep-search"
 #   pull <path>   - Copy a file/folder from container to host
 #   pest [args]   - Run Pest with optional arguments
 #   exec <cmd>    - Execute a command in the container
+#   sync-vendor   - Copy vendor from container to vendor-test for IDE support
 
 case "$1" in
+    sync-vendor)
+        rm -rf ./vendor-test
+        docker cp "$CONTAINER:$PLUGIN_PATH/vendor" ./vendor-test
+        echo "Synced vendor to vendor-test for IDE support"
+        ;;
     copy)
         if [ -z "$2" ]; then
             echo "Usage: ./test copy <path>"
@@ -31,18 +37,30 @@ case "$1" in
         ;;
     pest)
         shift
-        docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        if [ -t 0 ]; then
+            docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        else
+            docker exec "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        fi
         ;;
     exec)
         shift
-        docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && $*"
+        if [ -t 0 ]; then
+            docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && $*"
+        else
+            docker exec "$CONTAINER" bash -c "cd $PLUGIN_PATH && $*"
+        fi
         ;;
     *)
         # Default: sync and run pest
-        docker cp ./tests "$CONTAINER:$PLUGIN_PATH/"
-        docker cp ./app "$CONTAINER:$PLUGIN_PATH/"
+        docker cp -q ./tests "$CONTAINER:$PLUGIN_PATH/"
+        docker cp -q ./app "$CONTAINER:$PLUGIN_PATH/"
         docker exec -u root "$CONTAINER" chown -R docker:docker "$PLUGIN_PATH/tests" "$PLUGIN_PATH/app"
-        docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        if [ -t 0 ]; then
+            docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        else
+            docker exec "$CONTAINER" bash -c "cd $PLUGIN_PATH && ./vendor/bin/pest $*"
+        fi
         ;;
 esac
 

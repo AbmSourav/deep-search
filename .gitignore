@@ -3,6 +3,8 @@
 
 /node_modules/
 /vendor/
+/vendor-test/
+/.phpunit.cache/
 
 build/
 prod/

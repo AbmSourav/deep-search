@@ -5,35 +5,27 @@ declare(strict_types=1);
 namespace DeepSearch\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use wpdb;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Brain\Monkey;
 
-/**
- * Base Test Case for Howdy QB Tests
- */
 abstract class TestCase extends BaseTestCase
 {
-    /**
-     * Current driver being used for testing
-     * @var string
-     */
-    protected $currentDriver = 'pdo';
-
-    /**
-     * Mock wpdb object for testing
-     * @var wpdb|\PHPUnit\Framework\MockObject\MockObject|null
-     */
-    protected $mockWpdb = null;
+    use MockeryPHPUnitIntegration;
 
     protected function setUp(): void
     {
         parent::setUp();
+        Monkey\setUp();
 
-
+        // Define ABSPATH if not defined
+        if (!defined('ABSPATH')) {
+            define('ABSPATH', '/var/www/html/');
+        }
     }
 
     protected function tearDown(): void
     {
+        Monkey\tearDown();
         parent::tearDown();
-        // Add any cleanup logic here
     }
 }
