@@ -12,11 +12,9 @@
             }
         }
     },
-    "include": [
-
-    ],
 	"exclude": [
 		"vendor/",
+		"vendor-test/",
 		"node_modules/"
 	]
 }
