@@ -5,6 +5,20 @@
   "category": "widgets",
   "icon": "search",
   "description": "Search block",
+  "attributes": {
+    "showPostTypes": {
+        "type": "boolean",
+        "default": true
+    },
+    "showCat": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTag": {
+      "type": "boolean",
+      "default": true
+    }
+  },
   "editorScript": "file:./build/index.js",
   "viewScript": "file:./build/view.js",
   "style": "file:./build/style-index.css"

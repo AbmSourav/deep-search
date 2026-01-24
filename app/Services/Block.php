@@ -43,6 +43,7 @@ class Block implements BaseService
         $block_data = [
             'ajaxUrl'    => admin_url('admin-ajax.php'),
             'nonce'      => wp_create_nonce('deep_search_nonce'),
+            'attibutes'  => $blockAttributes,
             'postTypes'  => $this->postTypeList(),
             'categories' => $this->categoryList(),
             'tags'       => $this->tagList(),

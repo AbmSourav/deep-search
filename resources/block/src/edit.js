@@ -1,6 +1,8 @@
 import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
+import SettingsControl from './editor-components/SettingsControl';
+
 export default function Edit( { attributes, setAttributes } ) {
     const blockProps = useBlockProps({
         className: 'ds-block-editor'
@@ -8,6 +10,8 @@ export default function Edit( { attributes, setAttributes } ) {
 
     return (
         <div {...blockProps}>
+            <SettingsControl attributes={attributes} setAttributes={setAttributes} />
+
             <div className="ds-bar">
                 <input
                 className="ds-input"
