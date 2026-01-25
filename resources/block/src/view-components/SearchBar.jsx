@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
 
-const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes }) => {
+const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes, elmHeight }) => {
     const [ searchKey, setSearchKey ] = useState('')
     const [ currentPage, setCurrentPage ] = useState(1)
 
@@ -53,7 +53,7 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
 
     return (
         <>
-            <div className="ds-bar">
+            <div className="ds-bar" ref={elmHeight}>
                 <input
                 onFocus={() => setFocusStatus(true)}
                 onChange={(e) => setSearchKey(e.target.value)}

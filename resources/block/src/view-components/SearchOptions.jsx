@@ -34,9 +34,17 @@ const SearchOptions = ({ props, queryData, setQueryData }) => {
         setQueryData({...queryData})
     }
 
+    if (
+        postTypes?.length === 0 &&
+        categories?.length === 0 &&
+        tags?.length === 0
+    ) {
+        return
+    }
+
     return (
         <div className="ds-options">
-            {postTypes.length &&
+            {postTypes?.length > 0 &&
                 <div className="ds-options__pt">
                     <Select
                     className="ds-options__pt-select"
@@ -49,7 +57,7 @@ const SearchOptions = ({ props, queryData, setQueryData }) => {
                 </div>
             }
 
-            {categories.length &&
+            {categories?.length > 0 &&
                 <div className="ds-options__cat">
                     <Select
                     className="ds-options__cat-select"
@@ -62,7 +70,7 @@ const SearchOptions = ({ props, queryData, setQueryData }) => {
                 </div>
             }
 
-            {tags.length &&
+            {tags?.length > 0 &&
                 <div className="ds-options__tag">
                     <Select
                     className="ds-options__tag-select"
