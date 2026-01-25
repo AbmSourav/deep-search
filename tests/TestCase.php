@@ -66,13 +66,14 @@ abstract class TestCase extends BaseTestCase
         Functions\when('check_ajax_referer')->justReturn(true);
 
         // URL/Path functions
-        Functions\when('plugin_dir_url')->justReturn('http://example.com/wp-content/plugins/deep-search/');
+        $baseUrl = 'http://example.com';
+        Functions\when('plugin_dir_url')->justReturn($baseUrl . '/wp-content/plugins/deep-search/');
         Functions\when('plugin_dir_path')->justReturn(DS_PLUGIN_DIR);
-        Functions\when('plugins_url')->justReturn('http://example.com/wp-content/plugins/');
-        Functions\when('admin_url')->alias(fn($path = '') => 'http://example.com/wp-admin/' . $path);
-        Functions\when('home_url')->alias(fn($path = '') => 'http://example.com/' . $path);
-        Functions\when('site_url')->alias(fn($path = '') => 'http://example.com/' . $path);
-        Functions\when('get_site_url')->justReturn('http://example.com');
+        Functions\when('plugins_url')->justReturn($baseUrl . '/wp-content/plugins/');
+        Functions\when('admin_url')->alias(fn($path = '') => $baseUrl . '/wp-admin/' . $path);
+        Functions\when('home_url')->alias(fn($path = '') => $baseUrl . '/' . $path);
+        Functions\when('site_url')->alias(fn($path = '') => $baseUrl . '/' . $path);
+        Functions\when('get_site_url')->justReturn($baseUrl);
 
         // Options functions
         Functions\when('get_option')->justReturn(false);
