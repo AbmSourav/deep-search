@@ -1,25 +1,87 @@
 <?php
 
-use Brain\Monkey\Functions;
+use DeepSearch\App\Core;
+use DeepSearch\App\Lib\BaseService;
+use DeepSearch\App\Services\AdminMenu;
+use DeepSearch\App\Services\AssetsManager;
+use DeepSearch\App\Services\Block;
+use DeepSearch\App\Services\SearchConfigs;
 
-beforeEach(function () {
-    // Stub the exit function that Core.php uses via ABSPATH check
+/*
+|--------------------------------------------------------------------------
+| Plugin File Structure Tests
+|--------------------------------------------------------------------------
+*/
+
+it('has main plugin file', function () {
+    expect(DS_PLUGIN_DIR . 'search.php')->toBeFile();
 });
 
-it('can use brain monkey to mock wordpress functions', function () {
-    Functions\when('esc_html')->returnArg();
-
-    $result = esc_html('<script>alert("xss")</script>');
-
-    expect($result)->toBe('<script>alert("xss")</script>');
+it('has autoload file', function () {
+    expect(DS_PLUGIN_DIR . 'vendor/autoload.php')->toBeFile();
 });
 
-it('can mock add_action', function () {
-    Functions\expect('add_action')
-        ->once()
-        ->with('init', \Mockery::type('callable'));
+it('has composer.json file', function () {
+    expect(DS_PLUGIN_DIR . 'composer.json')->toBeFile();
+});
 
-    add_action('init', function () {
-        return 'test';
-    });
+/*
+|--------------------------------------------------------------------------
+| Core Class Tests
+|--------------------------------------------------------------------------
+*/
+
+it('has Core class', function () {
+    expect(Core::class)->toBeString();
+    expect(class_exists(Core::class))->toBeTrue();
+});
+
+it('Core class is final', function () {
+    $reflection = new ReflectionClass(Core::class);
+
+    expect($reflection->isFinal())->toBeTrue();
+});
+
+it('Core class uses SingleTon trait', function () {
+    $traits = class_uses(Core::class);
+
+    expect($traits)->toContain('DeepSearch\App\Lib\SingleTon');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Base Library Classes Tests
+|--------------------------------------------------------------------------
+*/
+
+it('has BaseService interface', function () {
+    expect(interface_exists(BaseService::class))->toBeTrue();
+});
+
+it('BaseService interface has register method', function () {
+    $reflection = new ReflectionClass(BaseService::class);
+
+    expect($reflection->hasMethod('register'))->toBeTrue();
+});
+
+/*
+|--------------------------------------------------------------------------
+| Service Classes Tests
+|--------------------------------------------------------------------------
+*/
+
+it('has AdminMenu service class', function () {
+    expect(class_exists(AdminMenu::class))->toBeTrue();
+});
+
+it('has AssetsManager service class', function () {
+    expect(class_exists(AssetsManager::class))->toBeTrue();
+});
+
+it('has Block service class', function () {
+    expect(class_exists(Block::class))->toBeTrue();
+});
+
+it('has SearchConfigs service class', function () {
+    expect(class_exists(SearchConfigs::class))->toBeTrue();
 });

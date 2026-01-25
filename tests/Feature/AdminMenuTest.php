@@ -12,6 +12,12 @@ beforeEach(function () {
     $instance->setValue(null, null);
 });
 
+/*
+|--------------------------------------------------------------------------
+| AdminMenu Class Tests
+|--------------------------------------------------------------------------
+*/
+
 it('registers admin_menu action when in admin', function () {
     Functions\when('is_admin')->justReturn(true);
 
@@ -33,8 +39,6 @@ it('does not register admin_menu action when not in admin', function () {
 });
 
 it('adds menu page with correct parameters', function () {
-    Functions\when('__')->returnArg();
-
     Functions\expect('add_menu_page')
         ->once()
         ->with(
@@ -49,4 +53,28 @@ it('adds menu page with correct parameters', function () {
 
     $adminMenu = AdminMenu::getInstance();
     $adminMenu->addMenu();
+});
+
+/*
+|--------------------------------------------------------------------------
+| Rendered view.php Tests
+|--------------------------------------------------------------------------
+*/
+
+it('has admin view file', function () {
+    $viewFile = DS_PLUGIN_DIR . 'resources/admin/view.php';
+
+    expect($viewFile)->toBeFile();
+});
+
+it('renders admin page by requiring the view file', function () {
+    $adminMenu = AdminMenu::getInstance();
+
+    // Start output buffering to capture output from the view
+    ob_start();
+    $adminMenu->renderAdminPage();
+    $output = ob_get_clean();
+
+    // The view file should be included and produce the expected HTML structure
+    expect($output)->toContain('<div id="ds-container"></div>');
 });
