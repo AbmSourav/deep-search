@@ -18,6 +18,11 @@ beforeEach(function () {
 |--------------------------------------------------------------------------
 */
 
+it('has AdminMenu class', function () {
+    expect(AdminMenu::class)->toBeString();
+    expect(class_exists(AdminMenu::class))->toBeTrue();
+});
+
 it('registers admin_menu action when in admin', function () {
     Functions\when('is_admin')->justReturn(true);
 
