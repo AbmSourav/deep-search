@@ -8,8 +8,8 @@ const SettingsControl = ({attributes, setAttributes}) => {
             <PanelBody title={ __( 'Query Options', 'deep-search' ) }>
                 <ToggleControl
                     label={ __( 'Show Post Type', 'deep-search' ) }
-                    checked={attributes?.showPostTypes}
-                    onChange={val => setAttributes({showPostTypes: val})}
+                    checked={attributes?.showPostType}
+                    onChange={val => setAttributes({showPostType: val})}
                 />
                 <ToggleControl
                     label={ __( 'Show Category', 'deep-search' ) }

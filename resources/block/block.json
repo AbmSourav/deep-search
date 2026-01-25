@@ -6,7 +6,7 @@
   "icon": "search",
   "description": "Search block",
   "attributes": {
-    "showPostTypes": {
+    "showPostType": {
         "type": "boolean",
         "default": true
     },

@@ -1,39 +1,20 @@
 .block-editor-block-list__block {
-    .ds-bar {
-        display: flex;
-        border: 1px solid #cacaca;
-        align-items: center;
-        border-radius: 20px;
-        padding: 8px;
-        overflow: hidden;
-        box-shadow: 1px 2px 2px #2828284f;
-
-        .ds-input {
+    .ds-options {
+        &__pt-select,
+        &__cat-select,
+        &__tag-select {
             width: 100%;
-            padding: 10px;
-            margin: 0;
-            border: none;
-            font-size: 16px;
-            color: #3e3c3c;
-
-            &:active,
-            &:focus {
-                outline: none;
-                border: none;
-            }
-        }
-
-        .ds-icon {
-            margin: 8px 8px 2px 0;
-
-            svg {
-                width: 25px;
-                height: 25px;
-            }
+            border: 1px solid #e8e8e8;
+            padding: 10px 3px;
+            box-shadow: 0 0 0 1px #b4b4b4;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #959595;
         }
     }
 }
 
+.block-editor-block-list__block,
 .ds-root {
     position: relative;
 

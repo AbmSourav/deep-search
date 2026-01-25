@@ -44,7 +44,7 @@ class Block implements BaseService
             'ajaxUrl'    => admin_url('admin-ajax.php'),
             'nonce'      => wp_create_nonce('deep_search_nonce'),
             'attibutes'  => $blockAttributes,
-            'postTypes'  => $blockAttributes['showPostTypes'] ? $this->postTypeList() : [],
+            'postTypes'  => $blockAttributes['showPostType'] ? $this->postTypeList() : [],
             'categories' => $blockAttributes['showCat'] ? $this->categoryList() : [],
             'tags'       => $blockAttributes['showTag'] ? $this->tagList() : [],
         ];
