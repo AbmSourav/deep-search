@@ -8,7 +8,6 @@ beforeEach(function () {
     // Reset singleton instance between tests
     $reflection = new ReflectionClass(AdminMenu::class);
     $instance = $reflection->getProperty('instance');
-    $instance->setAccessible(true);
     $instance->setValue(null, null);
 });
 
@@ -67,9 +66,7 @@ it('adds menu page with correct parameters', function () {
 */
 
 it('has admin view file', function () {
-    $viewFile = DS_PLUGIN_DIR . 'resources/admin/view.php';
-
-    expect($viewFile)->toBeFile();
+    expect(DS_PLUGIN_DIR . 'resources/admin/view.php')->toBeFile();
 });
 
 it('renders admin page by requiring the view file', function () {
