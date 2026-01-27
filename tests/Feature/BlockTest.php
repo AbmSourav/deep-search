@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @property Block $block
+ * @property ReflectionClass $reflection
+ */
+
 use Brain\Monkey\Functions;
 use Brain\Monkey\Actions;
 use DeepSearch\App\Services\Block;
@@ -9,6 +14,10 @@ beforeEach(function () {
     $reflection = new ReflectionClass(Block::class);
     $instance = $reflection->getProperty('instance');
     $instance->setValue(null, null);
+
+    // Set up shared test context
+    $this->block = Block::getInstance();
+    $this->reflection = new ReflectionClass($this->block);
 });
 
 /*
@@ -100,11 +109,8 @@ it('renders the block view file', function () {
 it('categoryList returns empty array when no categories', function () {
     Functions\when('get_categories')->justReturn([]);
 
-    $block = Block::getInstance();
-    $reflection = new ReflectionClass($block);
-    $method = $reflection->getMethod('categoryList');
-
-    $result = $method->invoke($block);
+    $method = $this->reflection->getMethod('categoryList');
+    $result = $method->invoke($this->block);
 
     expect($result)->toBeArray()->toBeEmpty();
 });
@@ -118,11 +124,8 @@ it('categoryList returns formatted category array', function () {
 
     Functions\when('get_categories')->justReturn([$mockCategory]);
 
-    $block = Block::getInstance();
-    $reflection = new ReflectionClass($block);
-    $method = $reflection->getMethod('categoryList');
-
-    $result = $method->invoke($block);
+    $method = $this->reflection->getMethod('categoryList');
+    $result = $method->invoke($this->block);
 
     expect($result)->toBeArray()->toHaveCount(1);
     expect($result[0])->toBe([
