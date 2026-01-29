@@ -11,3 +11,11 @@ pint.json
 
 resources/admin/src
 resources/block/src
+
+README.md
+
+vendor
+vendor-test
+phpunit.xml
+tests
+test

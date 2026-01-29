@@ -303,7 +303,7 @@ it('returns posts data on successful search - search', function () {
 
 /*
 |--------------------------------------------------------------------------
-| query Method Tests (private method via reflection)
+| query Method Tests
 |--------------------------------------------------------------------------
 */
 
