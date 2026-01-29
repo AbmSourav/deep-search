@@ -134,3 +134,71 @@ it('categoryList returns formatted category array', function () {
         'label'   => 'Uncategorized',
     ]);
 });
+
+/*
+|--------------------------------------------------------------------------
+| postTypeList Method Tests (private method via reflection)
+|--------------------------------------------------------------------------
+*/
+
+it('postTypeList returns empty array when no categories', function () {
+    Functions\when('get_post_types')->justReturn([]);
+
+    $method = $this->reflection->getMethod('postTypeList');
+    $result = $method->invoke($this->block);
+
+    expect($result)->toBeArray()->toBeEmpty();
+});
+
+it('postTypeList returns formatted postType array', function () {
+    $mockPostTypes = [
+        'post' => 'Post',
+        'page' => 'Page',
+    ];
+
+    Functions\when('get_post_types')->justReturn($mockPostTypes);
+
+    $method = $this->reflection->getMethod('postTypeList');
+    $result = $method->invoke($this->block);
+
+    expect($result)->toBeArray()->toHaveCount(2);
+    expect($result[0])->toBe([
+        'value'   => 'post',
+        'label'   => 'Post',
+    ]);
+});
+
+/*
+|--------------------------------------------------------------------------
+| tagList Method Tests (private method via reflection)
+|--------------------------------------------------------------------------
+*/
+
+it('tagList returns empty array when no categories', function () {
+    Functions\when('get_tags')->justReturn([]);
+
+    $method = $this->reflection->getMethod('tagList');
+    $result = $method->invoke($this->block);
+
+    expect($result)->toBeArray()->toBeEmpty();
+});
+
+it('tagList returns formatted tags array', function () {
+    $mockPostTypes = (object) [
+        'term_id' => 1,
+        'slug'    => 'tagslug',
+        'name'    => 'Tag Name',
+    ];
+
+    Functions\when('get_tags')->justReturn([$mockPostTypes]);
+
+    $method = $this->reflection->getMethod('tagList');
+    $result = $method->invoke($this->block);
+
+    expect($result)->toBeArray()->toHaveCount(1);
+    expect($result[0])->toBe([
+        'term_id' => 1,
+        'value'   => 'tagslug',
+        'label'   => 'Tag Name',
+    ]);
+});
