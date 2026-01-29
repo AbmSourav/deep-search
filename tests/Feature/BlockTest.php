@@ -8,6 +8,7 @@
 use Brain\Monkey\Functions;
 use Brain\Monkey\Actions;
 use DeepSearch\App\Services\Block;
+use DeepSearch\Tests\MocksAndStubs\WpDieException;
 
 beforeEach(function () {
     // Reset singleton instance between tests
@@ -106,7 +107,7 @@ it('renders the block view file', function () {
 |--------------------------------------------------------------------------
 */
 
-it('categoryList returns empty array when no categories', function () {
+it('returns empty array when no categories - categoryList', function () {
     Functions\when('get_categories')->justReturn([]);
 
     $method = $this->reflection->getMethod('categoryList');
@@ -115,7 +116,7 @@ it('categoryList returns empty array when no categories', function () {
     expect($result)->toBeArray()->toBeEmpty();
 });
 
-it('categoryList returns formatted category array', function () {
+it('returns formatted category array - categoryList', function () {
     $mockCategory = (object) [
         'term_id' => 1,
         'slug'    => 'uncategorized',
@@ -141,7 +142,7 @@ it('categoryList returns formatted category array', function () {
 |--------------------------------------------------------------------------
 */
 
-it('postTypeList returns empty array when no categories', function () {
+it('returns empty array when no categories - postTypeList', function () {
     Functions\when('get_post_types')->justReturn([]);
 
     $method = $this->reflection->getMethod('postTypeList');
@@ -150,7 +151,7 @@ it('postTypeList returns empty array when no categories', function () {
     expect($result)->toBeArray()->toBeEmpty();
 });
 
-it('postTypeList returns formatted postType array', function () {
+it('returns formatted postType array - postTypeList', function () {
     $mockPostTypes = [
         'post' => 'Post',
         'page' => 'Page',
@@ -174,7 +175,7 @@ it('postTypeList returns formatted postType array', function () {
 |--------------------------------------------------------------------------
 */
 
-it('tagList returns empty array when no categories', function () {
+it('returns empty array when no categories - tagList', function () {
     Functions\when('get_tags')->justReturn([]);
 
     $method = $this->reflection->getMethod('tagList');
@@ -183,7 +184,7 @@ it('tagList returns empty array when no categories', function () {
     expect($result)->toBeArray()->toBeEmpty();
 });
 
-it('tagList returns formatted tags array', function () {
+it('returns formatted tags array - tagList', function () {
     $mockPostTypes = (object) [
         'term_id' => 1,
         'slug'    => 'tagslug',
@@ -201,4 +202,131 @@ it('tagList returns formatted tags array', function () {
         'value'   => 'tagslug',
         'label'   => 'Tag Name',
     ]);
+});
+
+/*
+|--------------------------------------------------------------------------
+| search Method Tests
+|--------------------------------------------------------------------------
+*/
+
+it('returns validation error when nonce is missing - search', function () {
+    $_POST = [
+        'action' => 'search',
+        'query'  => '{"s":"test"}',
+    ];
+
+    try {
+        $this->block->search();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeFalse();
+        expect($data['data']['message'])->toBe('Validation error');
+        expect($e->statusCode)->toBe(403);
+    }
+});
+
+it('returns validation error when action is missing - search', function () {
+    $_POST = [
+        'nonce' => 'test_nonce',
+        'query' => '{"s":"test"}',
+    ];
+
+    try {
+        $this->block->search();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeFalse();
+        expect($data['data']['message'])->toBe('Validation error');
+        expect($e->statusCode)->toBe(403);
+    }
+});
+
+it('returns validation error when query is missing - search', function () {
+    $_POST = [
+        'nonce'  => 'test_nonce',
+        'action' => 'search',
+    ];
+
+    try {
+        $this->block->search();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeFalse();
+        expect($data['data']['message'])->toBe('Validation error');
+        expect($e->statusCode)->toBe(403);
+    }
+});
+
+it('returns error when nonce verification fails - search', function () {
+    $_POST = [
+        'nonce'  => 'invalid_nonce',
+        'action' => 'search',
+        'query'  => '{"s":"test"}',
+    ];
+
+    Functions\when('wp_verify_nonce')->justReturn(false);
+
+    try {
+        $this->block->search();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeFalse();
+        expect($data['data']['message'])->toBe('Invalid security token.');
+        expect($e->statusCode)->toBe(403);
+    }
+});
+
+it('returns posts data on successful search - search', function () {
+    $_POST = [
+        'nonce'  => 'valid_nonce',
+        'action' => 'search',
+        'query'  => '{"s":"test","currentPage":1}',
+    ];
+
+    try {
+        $this->block->search();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($e->statusCode)->toBe(200);
+        expect($data)->toHaveKey('data');
+        expect($data['data'])->toHaveKeys([
+            'posts', 'totalPosts', 'totalPage', 'nextPage', 'prevPage'
+        ]);
+    }
+});
+
+/*
+|--------------------------------------------------------------------------
+| query Method Tests (private method via reflection)
+|--------------------------------------------------------------------------
+*/
+
+it('query method is private', function () {
+    $method = $this->reflection->getMethod('query');
+
+    expect($method->isPrivate())->toBeTrue();
+    expect($method->getNumberOfParameters())->toBe(1);
+});
+
+it('returns empty posts when no posts found - query', function () {
+    $method = $this->reflection->getMethod('query');
+    $result = $method->invoke($this->block, ['currentPage' => 1]);
+
+    expect($result)->toBeArray();
+    expect($result['posts'])->toBeArray()->toBeEmpty();
+    expect($result['totalPosts'])->toBe(0);
+    expect($result['totalPage'])->toBe(0);
+});
+
+it('returns correct pagination when on first page - query', function () {
+    $method = $this->reflection->getMethod('query');
+    $result = $method->invoke($this->block, ['currentPage' => 1]);
+
+    expect($result['prevPage'])->toBe(0);
 });
