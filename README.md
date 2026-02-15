@@ -16,7 +16,7 @@ A Gutenberg-native advanced search block for WordPress with multi-filter support
 <br>
 
 ## Download Production ready zip
-(Click to download)[https://github.com/AbmSourav/deep-search/archive/refs/tags/1.0.0.zip]
+[Click to download](https://github.com/AbmSourav/deep-search/releases/download/1.0.0/deep-search.zip)
 
 <br>
 

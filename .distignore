@@ -6,6 +6,7 @@ package-lock.json
 
 composer.json
 composer.lock
+composerTest.json
 
 pint.json
 
@@ -14,7 +15,6 @@ resources/block/src
 
 README.md
 
-vendor
 vendor-test
 phpunit.xml
 tests
