@@ -1,6 +1,8 @@
 # Deep Search
 
-Search plugin for WordPress
+Search plugin for WordPress.
+
+A Gutenberg-native advanced search block for WordPress with multi-filter support (post type, category, tags) and an admin configuration panel.
 
 <br>
 
@@ -10,6 +12,11 @@ Search plugin for WordPress
 * WordPress >= 6.8
 * PHP >= 8.3 (Only for test suite)
 * NodeJS >= 22.x (Only for development env)
+
+<br>
+
+## Download Production ready zip
+(Click to download)[https://github.com/AbmSourav/deep-search/archive/refs/tags/1.0.0.zip]
 
 <br>
 
