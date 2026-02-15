@@ -6,7 +6,7 @@
  *
  * Plugin Name: Deep Search
  * Plugin URI:
- * Description: Search plugin for WordPress
+ * Description: Advaned Search plugin for WordPress
  * Author: Keramot UL Islam
  * Author URI: https://abmsourav.com
  * Version: 1.0.0
