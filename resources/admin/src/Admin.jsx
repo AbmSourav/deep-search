@@ -96,7 +96,7 @@ const Admin = () => {
                 <NumberControl
                 value={postPerPage}
                 onChange={handlePostPerPage}
-                min={-1}
+                min={1}
                 max={10}
                 />
             </div>
