@@ -97,7 +97,7 @@ const Admin = () => {
                 value={postPerPage}
                 onChange={handlePostPerPage}
                 min={1}
-                max={10}
+                max={20}
                 />
             </div>
 
