@@ -26,9 +26,20 @@ class Block implements BaseService
             return;
         }
 
-        register_block_type(DS_PLUGIN_DIR . 'resources/block', [
+        $block = register_block_type(DS_PLUGIN_DIR . 'resources/block', [
             'render_callback' => [$this, 'renderBlock']
         ]);
+
+        if ($block && isset($block->editor_script_handles[0])) {
+            wp_localize_script(
+                $block->editor_script_handles[0],
+                'dsBlock',
+                [
+                    'ajaxUrl' => admin_url('admin-ajax.php'),
+                    'nonce'   => wp_create_nonce('deep_search_nonce'),
+                ]
+            );
+        }
     }
 
     public function renderBlock(array $blockAttributes, string $content)

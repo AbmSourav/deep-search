@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Spinner } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { adjustColor } from './adjustColor';
 
 const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => {
     const [page, setPage] = useState(1)
+    const { attibutes } = props
 
     const handleClose = () => {
         setQueryData({})
@@ -35,6 +37,11 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
 
     return (
         <div className="ds-postlist">
+            <style>{
+                `
+                .ds-postlist__post {border-bottom-color: ${adjustColor(attibutes?.backgroundColor) || '#eee'} !important;}
+                `
+            }</style>
             <div className="ds-postlist__close" onClick={handleClose}>
                 <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"/></svg>
             </div>
@@ -54,10 +61,14 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
                             href={post.permalink}
                             key={index}
                             className='ds-postlist__post-title'
+                            style={{color: attibutes?.postTitleColor || '#027141'}}
                             >
                                 {post.title}
                             </a>
-                            <span className='ds-postlist__post-date'>{post.date}</span>
+                            <span
+                            className='ds-postlist__post-date'
+                            style={{color: attibutes?.postDateColor || '#696969'}}
+                            >{post.date}</span>
                         </div>
                     ))}
 

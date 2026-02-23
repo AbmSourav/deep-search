@@ -26,9 +26,13 @@ const DeepSearch = ({ props }) => {
         setQueryRes({})
     }
 
+    const commonStyles = {
+        backgroundColor: props?.attibutes?.backgroundColor || '#fff',
+    }
+
     return (
         <div style={{ height: wrapHeight ? `${wrapHeight}px` : 'auto' }}>
-            <div className={classNames}>
+            <div className={classNames} style={commonStyles}>
                 {focusStatus &&
                     (<div className="ds-overlay" onClick={handleCloseDropDown}></div>)
                 }
@@ -43,7 +47,6 @@ const DeepSearch = ({ props }) => {
                     elmHeight={wrapRef}
                     />
                 }
-
                 {focusStatus && !queryRes?.loading && Object.keys(queryRes).length === 0 &&
                     <SearchOptions
                     props={props}
