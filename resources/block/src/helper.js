@@ -1,4 +1,27 @@
 
+export const restApiRequest = (query) => {
+    return fetch('/wp-json/deep-search/v1/search', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({query}),
+    });
+}
+
+export const ajaxRequest = (props, query) => {
+    const nonce = typeof dsBlock !== 'undefined' ? dsBlock.nonce : props?.nonce;
+    const url = typeof dsBlock !== 'undefined' ? dsBlock.ajaxUrl : props?.ajaxUrl;
+
+    const form = new FormData()
+    form.append('action', 'search');
+    form.append('nonce', nonce);
+    form.append('query', JSON.stringify(query));
+
+    return fetch(url, {
+        method: 'POST',
+        body: form,
+    })
+}
+
 export function adjustColor(hex) {
     if (!hex || typeof hex !== 'string') return hex;
 

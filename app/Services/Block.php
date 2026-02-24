@@ -6,6 +6,7 @@ use Codesvault\Validator\Validator;
 use DeepSearch\App\Lib\BaseService;
 use DeepSearch\App\Lib\SingleTon;
 use WP_Query;
+use WP_REST_Request;
 
 if (! defined('ABSPATH')) exit;
 
@@ -16,6 +17,7 @@ class Block implements BaseService
     public function register()
     {
         add_action('init', [$this, 'registerBlocks']);
+        add_action('rest_api_init', [$this, 'restApi']);
         add_action('wp_ajax_search', [$this, 'search']);
         add_action('wp_ajax_nopriv_search', [$this, 'search']);
     }
@@ -131,8 +133,51 @@ class Block implements BaseService
         return $list;
     }
 
+    public function restApi()
+    {
+        register_rest_route('deep-search/v1', '/search', [
+            'methods'             => 'POST',
+            'callback'            => [$this, 'restSearch'],
+            'permission_callback' => '__return_true',
+        ]);
+    }
+
+    public function restSearch(WP_REST_Request $request)
+    {
+        $query = $request->get_param('query');
+        if (! $query) {
+            return new \WP_REST_Response([
+                'message' => 'Missing parameter',
+            ], 400);
+        }
+
+        // validate data type and strip html tags
+        $validator = Validator::validate(
+            [
+                's'           => 'string',
+                'postTypes'   => 'string',
+                'cats'        => 'string',
+                'tags'        => 'string',
+                'currentPage' => 'integer'
+            ],
+            $query
+        );
+
+        if ($validator->error()) {
+            wp_send_json_error([
+                'message' => 'Validation error',
+                'errors'  => $validator->error()
+            ], 403);
+        }
+
+        $posts = $this->query($validator->getData());
+
+        return new \WP_REST_Response(['data' => $posts], 200);
+    }
+
     public function search()
     {
+        // validate data type and strip html tags
         $validator = Validator::validate(
             [
                 'nonce'  => 'required|string',
@@ -180,19 +225,19 @@ class Block implements BaseService
         ];
 
         if (!empty($queryParams['postTypes'])) {
-            $args['post_type'] = $queryParams['postTypes'];
+            $args['post_type'] = explode(',', $queryParams['postTypes']);
         }
 
         if (!empty($queryParams['s'])) {
             $args['s'] = sanitize_text_field($queryParams['s']);
         }
 
-        if (!empty($queryParams['cats']) && is_array($queryParams['cats'])) {
-            $args['category__in'] = $queryParams['cats'];
+        if (!empty($queryParams['cats'])) {
+            $args['category__in'] = explode(',', $queryParams['cats']);
         }
 
-        if (!empty($queryParams['tags']) && is_array($queryParams['tags'])) {
-            $args['tag__in'] = $queryParams['tags'];
+        if (!empty($queryParams['tags'])) {
+            $args['tag__in'] = explode(',', $queryParams['tags']);
         }
 
         $query = new WP_Query($args);

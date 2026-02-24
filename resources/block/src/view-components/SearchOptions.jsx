@@ -3,7 +3,8 @@ import Select from 'react-select';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { __ } from '@wordpress/i18n';
-import { adjustColor } from './adjustColor';
+
+import { adjustColor } from '../helper';
 
 const SearchOptions = ({ props, queryData, setQueryData }) => {
     const { postTypes, categories, tags, attibutes } = props
@@ -20,32 +21,32 @@ const SearchOptions = ({ props, queryData, setQueryData }) => {
     }, []);
 
     const handlePostTypleChange = (postTypes) => {
-        let postTypesData = []
+        let postTypesData = ''
         postTypes.map(postType => {
-            postTypesData.push(postType.value)
+            postTypesData += postType.value + ','
         })
 
-        queryData.postTypes = postTypesData
+        queryData.postTypes = postTypesData.replace(/,*\s*$/, "")
         setQueryData({...queryData})
     }
 
     const handleCatChange = (cats) => {
-        let catData = []
+        let catData = ''
         cats.map(cat => {
-            catData.push(cat?.term_id)
+            catData += cat?.term_id + ','
         })
 
-        queryData.cats = catData
+        queryData.cats = catData.replace(/,*\s*$/, "")
         setQueryData({...queryData})
     }
 
     const handleTagChange = (tags) => {
-        let tagData = []
+        let tagData = ''
         tags.map(tag => {
-            tagData.push(tag.term_id)
+            tagData += tag.term_id + ','
         })
 
-        queryData.tags = tagData
+        queryData.tags = tagData.replace(/,*\s*$/, "")
         setQueryData({...queryData})
     }
 

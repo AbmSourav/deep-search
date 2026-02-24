@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import { Spinner } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { adjustColor } from './adjustColor';
+
+import { ajaxRequest, restApiRequest, adjustColor } from '../helper';
 
 const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => {
-    const [page, setPage] = useState(1)
     const { attibutes } = props
 
     const handleClose = () => {
@@ -12,31 +11,26 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
         setQueryRes({})
     }
 
-    const handlePagination = (currentPage) => {
+    const handlePagination = async (currentPage) => {
         setQueryRes({loading: true})
         queryData['currentPage'] = currentPage
         setQueryData({...queryData})
+        let resData = null
 
-        const form = new FormData()
-        form.append('action', 'search');
+        const res = await restApiRequest(queryData)
+        if (res?.status === 200) {
+            resData = await res.json()
+        }
 
-        const nonce = typeof dsBlock !== 'undefined' ? dsBlock.nonce : props?.nonce;
-        const url = typeof dsBlock !== 'undefined' ? dsBlock.ajaxUrl : props?.ajaxUrl;
+        // if rest-api is not enabled then do the ajax request
+        if (res?.status > 399) {
+            const ajaxRes = await ajaxRequest(props, query)
+            if (ajaxRes?.status === 200) {
+                resData = await ajaxRes.json()
+            }
+        }
 
-        form.append('nonce', nonce);
-        form.append('query', JSON.stringify(queryData));
-
-        fetch(url, {
-            method: 'POST',
-            body: form,
-        })
-        .then((res => res.json()))
-        .then(data => {
-            setQueryRes(data?.data)
-        })
-        .catch(error => {
-            console.error(error)
-        })
+        setQueryRes(resData?.data)
     }
 
     const paginationStyles = {
@@ -50,10 +44,14 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
             <style>{
                 `
                 .ds-postlist__post {border-bottom-color: ${adjustColor(attibutes?.backgroundColor) || '#eee'} !important;}
+                .ds-postlist__inner {scrollbar-color: #b4b4b4 ${adjustColor(attibutes?.backgroundColor) || '#e3e3e37c'} !important;}
                 `
             }</style>
-            <div className="ds-postlist__close" onClick={handleClose}>
-                <svg style={{fill: adjustColor(attibutes?.textColor)}} xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"/></svg>
+
+            <div className="ds-postlist__header" style={{backgroundColor: adjustColor(attibutes?.backgroundColor) || '#eee'}}>
+                <div className="ds-postlist__header-close" onClick={handleClose}>
+                    <svg style={{fill: adjustColor(attibutes?.textColor)}} xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"/></svg>
+                </div>
             </div>
 
             <div className='ds-postlist__inner'>
@@ -106,13 +104,12 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
                     }
                     </>
                 }
+
+                {queryRes?.posts?.length === 0 &&
+                    <p>{__('Nothing found', 'deep-search')}</p>
+                }
             </div>
 
-            {queryRes?.posts?.length === 0 &&
-                <div className='ds-postlist__inner'>
-                    <p>{__('Posts not found', 'deep-search')}</p>
-                </div>
-            }
         </div>
     )
 }

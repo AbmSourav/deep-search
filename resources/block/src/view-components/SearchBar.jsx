@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { __ } from '@wordpress/i18n';
-import { adjustColor } from './adjustColor';
+
+import { ajaxRequest, restApiRequest, adjustColor } from '../helper';
 
 const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes, elmHeight }) => {
     const [ searchKey, setSearchKey ] = useState('')
@@ -26,7 +27,7 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
         return isEmpty
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!searchKey && isQueryDataEmpty()) {
             return
         }
@@ -35,26 +36,22 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
 
         const query = {...queryData, s: searchKey, currentPage: 1}
         setQueryData(query)
+        let resData = null
 
-        const form = new FormData()
-        form.append('action', 'search');
-        const nonce = typeof dsBlock !== 'undefined' ? dsBlock.nonce : props?.nonce;
-        const url = typeof dsBlock !== 'undefined' ? dsBlock.ajaxUrl : props?.ajaxUrl;
+        const res = await restApiRequest(query)
+        if (res?.status === 200) {
+            resData = await res.json()
+        }
 
-        form.append('nonce', nonce);
-        form.append('query', JSON.stringify(query));
+        // if rest-api is not enabled then do the ajax request
+        if (res?.status > 399) {
+            const ajaxRes = await ajaxRequest(props, query)
+            if (ajaxRes?.status === 200) {
+                resData = await ajaxRes.json()
+            }
+        }
 
-        fetch(url, {
-            method: 'POST',
-            body: form,
-        })
-        .then((res => res.json()))
-        .then(data => {
-            setQueryRes(data?.data)
-        })
-        .catch(error => {
-            console.error(error)
-        })
+        setQueryRes(resData?.data)
     }
 
     const styles = {
@@ -65,6 +62,7 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
     return (
         <>
             <div className="ds-bar" ref={elmHeight}>
+                {console.log('q', queryData)}
                 {<style>{`.ds-input::placeholder { color: ${attibutes?.placeholderColor || 'inherit'}; }`}</style>}
                 <input
                 onFocus={() => setFocusStatus(true)}
