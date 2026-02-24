@@ -19,10 +19,14 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
 
         const form = new FormData()
         form.append('action', 'search');
-        form.append('nonce', props.nonce);
+
+        const nonce = typeof dsBlock !== 'undefined' ? dsBlock.nonce : props?.nonce;
+        const url = typeof dsBlock !== 'undefined' ? dsBlock.ajaxUrl : props?.ajaxUrl;
+
+        form.append('nonce', nonce);
         form.append('query', JSON.stringify(queryData));
 
-        fetch(props.ajaxUrl, {
+        fetch(url, {
             method: 'POST',
             body: form,
         })
@@ -35,6 +39,12 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
         })
     }
 
+    const paginationStyles = {
+        backgroundColor: attibutes?.paginationBtnBg || 'initial',
+        color: attibutes?.paginationBtnColor || 'initial',
+        borderColor: adjustColor(attibutes?.paginationBtnBg) || 'initial'
+    }
+
     return (
         <div className="ds-postlist">
             <style>{
@@ -43,7 +53,7 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
                 `
             }</style>
             <div className="ds-postlist__close" onClick={handleClose}>
-                <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"/></svg>
+                <svg style={{fill: adjustColor(attibutes?.textColor)}} xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" width="24px" height="24px"><path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"/></svg>
             </div>
 
             <div className='ds-postlist__inner'>
@@ -61,7 +71,7 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
                             href={post.permalink}
                             key={index}
                             className='ds-postlist__post-title'
-                            style={{color: attibutes?.postTitleColor || '#027141'}}
+                            style={{color: attibutes?.postTitleColor || '#027141', fontSize: attibutes?.postTitleFontSize || '30px'}}
                             >
                                 {post.title}
                             </a>
@@ -78,6 +88,7 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
                                 <button
                                 className='ds-postlist__pagination-btn'
                                 onClick={() => handlePagination(queryRes?.prevPage)}
+                                style={paginationStyles}
                                 >
                                     {__('Previous', 'deep-search')}
                                 </button>
@@ -86,6 +97,7 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
                                 <button
                                 className='ds-postlist__pagination-btn'
                                 onClick={() => handlePagination(queryRes?.nextPage)}
+                                style={paginationStyles}
                                 >
                                     {__('Next', 'deep-search')}
                                 </button>

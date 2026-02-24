@@ -45,6 +45,18 @@
     "postDateColor": {
       "type": "string",
       "default": ""
+    },
+    "postTitleFontSize": {
+      "type": "string",
+      "default": ""
+    },
+    "paginationBtnBg": {
+      "type": "string",
+      "default": ""
+    },
+    "paginationBtnColor": {
+      "type": "string",
+      "default": ""
     }
   },
   "editorScript": "file:./build/index.js",
