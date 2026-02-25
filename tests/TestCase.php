@@ -7,7 +7,7 @@ namespace DeepSearch\Tests;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Brain\Monkey;
-use Brain\Monkey\Functions;
+
 use function DeepSearch\Tests\MocksAndStubs\commonWordPressMocks;
 
 abstract class TestCase extends BaseTestCase

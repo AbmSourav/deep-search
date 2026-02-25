@@ -36,9 +36,9 @@ function commonWordPressMocks(): void
     Functions\when('plugin_dir_url')->justReturn($baseUrl . '/wp-content/plugins/deep-search/');
     Functions\when('plugin_dir_path')->justReturn(DS_PLUGIN_DIR);
     Functions\when('plugins_url')->justReturn($baseUrl . '/wp-content/plugins/');
-    Functions\when('admin_url')->alias(fn($path = '') => $baseUrl . '/wp-admin/' . $path);
-    Functions\when('home_url')->alias(fn($path = '') => $baseUrl . '/' . $path);
-    Functions\when('site_url')->alias(fn($path = '') => $baseUrl . '/' . $path);
+    Functions\when('admin_url')->alias(fn ($path = '') => $baseUrl . '/wp-admin/' . $path);
+    Functions\when('home_url')->alias(fn ($path = '') => $baseUrl . '/' . $path);
+    Functions\when('site_url')->alias(fn ($path = '') => $baseUrl . '/' . $path);
     Functions\when('get_site_url')->justReturn($baseUrl);
 
     // Options functions
@@ -55,7 +55,7 @@ function commonWordPressMocks(): void
     Functions\when('wp_json_encode')->alias('json_encode');
     Functions\when('absint')->alias('intval');
     Functions\when('wp_unslash')->returnArg();
-    Functions\when('wp_parse_args')->alias(fn($args, $defaults) => array_merge($defaults, (array) $args));
+    Functions\when('wp_parse_args')->alias(fn ($args, $defaults) => array_merge($defaults, (array) $args));
 
     // AJAX response functions - throw exception to simulate die()
     Functions\when('wp_send_json_error')->alias(function ($data, $status = 400) {

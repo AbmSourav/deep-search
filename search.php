@@ -9,7 +9,7 @@
  * Description: Advaned Search plugin for WordPress
  * Author: Keramot UL Islam
  * Author URI: https://abmsourav.com
- * Version: 1.0.0
+ * Version: 1.1.0
  * Requires at least: 6.8
  * Requires PHP: 8.1
  * License URI:  https://www.gnu.org/licenses/old-licenses/gpl-2.0.html

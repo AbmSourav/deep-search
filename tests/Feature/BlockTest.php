@@ -71,7 +71,7 @@ it('registers deep-search block', function () {
         ->once()
         ->with(
             DS_PLUGIN_DIR . 'resources/block',
-            \Mockery::on(fn($args) => isset($args['render_callback']))
+            \Mockery::on(fn ($args) => isset($args['render_callback']))
         );
 
     Block::getInstance()->registerBlocks();
@@ -164,8 +164,8 @@ it('returns formatted postType array - postTypeList', function () {
 
     expect($result)->toBeArray()->toHaveCount(2);
     expect($result[0])->toBe([
-        'value'   => 'post',
-        'label'   => 'Post',
+        'value' => 'post',
+        'label' => 'Post',
     ]);
 });
 
