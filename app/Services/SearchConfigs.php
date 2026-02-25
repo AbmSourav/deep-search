@@ -51,7 +51,7 @@ class SearchConfigs implements BaseService
         }
 
         $postPerPage = $data['postPerPage'] ?? 5;
-        $showPagination = $data['showPagination'] ?? true;
+        $showPagination = $data['showPagination'] ?? 1;
         update_option('ds_configs', [
             'posts_per_page'  => absint($postPerPage),
             'show_pagination' => wp_validate_boolean($showPagination)
