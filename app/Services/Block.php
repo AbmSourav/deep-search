@@ -218,7 +218,7 @@ class Block implements BaseService
         $args = [
             'post_status'    => 'publish',
             'posts_per_page' => $searchConfigs['posts_per_page'] ?? 5,
-            'paged'          => $queryParams['currentPage'] ?? 1,
+            'paged'          => isset($queryParams['currentPage']) ? absint($queryParams['currentPage']) : 1,
         ];
 
         if (!empty($queryParams['postTypes'])) {

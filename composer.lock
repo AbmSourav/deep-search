@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "codesvault/validator",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CodesVault/validator.git",
-                "reference": "63d570307fb43bbed2a057ab75a160de8a6f8d67"
+                "reference": "14566dd27d96dd54afec8aab5ee95c4543d031eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CodesVault/validator/zipball/63d570307fb43bbed2a057ab75a160de8a6f8d67",
-                "reference": "63d570307fb43bbed2a057ab75a160de8a6f8d67",
+                "url": "https://api.github.com/repos/CodesVault/validator/zipball/14566dd27d96dd54afec8aab5ee95c4543d031eb",
+                "reference": "14566dd27d96dd54afec8aab5ee95c4543d031eb",
                 "shasum": ""
             },
             "require": {
@@ -59,9 +59,9 @@
             ],
             "support": {
                 "issues": "https://github.com/CodesVault/validator/issues",
-                "source": "https://github.com/CodesVault/validator/tree/1.2.1"
+                "source": "https://github.com/CodesVault/validator/tree/1.2.2"
             },
-            "time": "2025-12-23T10:39:30+00:00"
+            "time": "2026-02-25T09:15:25+00:00"
         }
     ],
     "packages-dev": [
@@ -790,5 +790,5 @@
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

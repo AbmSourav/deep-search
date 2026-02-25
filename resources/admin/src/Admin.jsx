@@ -3,7 +3,7 @@ import { ToggleControl, Button, Notice, __experimentalNumberControl as NumberCon
 import { __ } from '@wordpress/i18n';
 
 const Admin = () => {
-    const [ showPagination, setShowPagination ] = useState(true)
+    const [ showPagination, setShowPagination ] = useState(1)
     const [ postPerPage, setPostPerPage ] = useState(5)
     const [ isSubmitting, setisSubmitting ] = useState(false)
     const [ notice, setNotice ] = useState({ show: false, type: '', message: '' });
@@ -27,8 +27,9 @@ const Admin = () => {
         })
     }, [])
 
-    const handleShowPagination = () => {
-        setShowPagination(!showPagination)
+    const handleShowPagination = (val) => {
+        const paginationView = val === true ? 1 : 0
+        setShowPagination(paginationView)
     }
 
     const handlePostPerPage = (value) => {
@@ -42,7 +43,9 @@ const Admin = () => {
         const form = new FormData()
         form.append('action', 'setConfigurations');
         form.append('nonce', dsAdmin.nonce);
-        form.append('configs', JSON.stringify(configs));
+        form.append('postPerPage', postPerPage)
+        form.append('showPagination', showPagination)
+        console.log('showPagination', showPagination)
 
         fetch(dsAdmin.ajaxUrl, {
             method: 'POST',
@@ -84,8 +87,9 @@ const Admin = () => {
                 </div>
                 <ToggleControl
                     label=''
-                    checked={showPagination}
+                    checked={showPagination == 1 ? true : false}
                     onChange={handleShowPagination}
+                    __nextHasNoMarginBottom={true}
                 />
             </div>
 
@@ -98,6 +102,7 @@ const Admin = () => {
                 onChange={handlePostPerPage}
                 min={1}
                 max={20}
+                __next40pxDefaultSize
                 />
             </div>
 

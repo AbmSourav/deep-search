@@ -25,7 +25,8 @@ class SearchConfigs implements BaseService
             [
                 'nonce'   => 'required|string',
                 'action'  => 'required|stringOnly',
-                'configs' => 'required|string',
+                'postPerPage' => 'integer',
+                'showPagination' => 'bool',
             ],
             $_POST
         );
@@ -49,12 +50,11 @@ class SearchConfigs implements BaseService
             ], 403);
         }
 
-        $configs = json_decode(wp_unslash($data['configs']), true);
-        $postPerPage = $configs['postPerPage'] ?? 5;
-        $showPagination = $configs['showPagination'] ?? true;
+        $postPerPage = $data['postPerPage'] ?? 5;
+        $showPagination = $data['showPagination'] ?? true;
         update_option('ds_configs', [
-            'posts_per_page'  => sanitize_text_field($postPerPage),
-            'show_pagination' => sanitize_text_field($showPagination)
+            'posts_per_page'  => absint($postPerPage),
+            'show_pagination' => wp_validate_boolean($showPagination)
         ]);
 
         wp_send_json_success([
@@ -92,7 +92,7 @@ class SearchConfigs implements BaseService
         }
 
         $configs = get_option('ds_configs');
-        if (! $configs) {
+        if (! $configs || empty($configs)) {
             $configs = [
                 'posts_per_page'  => 5,
                 'show_pagination' => 1
