@@ -5,8 +5,6 @@ import { ajaxRequest, restApiRequest, adjustColor } from '../helper';
 
 const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes, elmHeight }) => {
     const [ searchKey, setSearchKey ] = useState('')
-    const [ currentPage, setCurrentPage ] = useState(1)
-
     const { attibutes } = props
 
     const isQueryDataEmpty = () => {
@@ -62,7 +60,6 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
     return (
         <>
             <div className="ds-bar" ref={elmHeight}>
-                {console.log('q', queryData)}
                 {<style>{`.ds-input::placeholder { color: ${attibutes?.placeholderColor || 'inherit'}; }`}</style>}
                 <input
                 onFocus={() => setFocusStatus(true)}

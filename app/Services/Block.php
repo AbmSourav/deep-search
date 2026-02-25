@@ -215,10 +215,11 @@ class Block implements BaseService
     protected function query($queryParams)
     {
         $searchConfigs = get_option('ds_configs');
+        $queryParams['currentPage'] = isset($queryParams['currentPage']) ? absint($queryParams['currentPage']) : 1;
         $args = [
             'post_status'    => 'publish',
             'posts_per_page' => $searchConfigs['posts_per_page'] ?? 5,
-            'paged'          => isset($queryParams['currentPage']) ? absint($queryParams['currentPage']) : 1,
+            'paged'          => $queryParams['currentPage'],
         ];
 
         if (!empty($queryParams['postTypes'])) {
@@ -226,7 +227,7 @@ class Block implements BaseService
         }
 
         if (!empty($queryParams['s'])) {
-            $args['s'] = sanitize_text_field($queryParams['s']);
+            $args['s'] = $queryParams['s'];
         }
 
         if (!empty($queryParams['cats'])) {
@@ -255,20 +256,10 @@ class Block implements BaseService
 
         $nextPage = 0;
         $prevPage = 0;
-        // default configs
-        if (! $searchConfigs) {
-            if ($queryParams['currentPage'] < $query->max_num_pages) {
-                $nextPage = $queryParams['currentPage'] + 1;
-            }
-            $prevPage = $queryParams['currentPage'] - 1;
+        if ($queryParams['currentPage'] < $query->max_num_pages) {
+            $nextPage = $queryParams['currentPage'] + 1;
         }
-        // after config is set by user
-        if ($searchConfigs && isset($searchConfigs['show_pagination']) && $searchConfigs['show_pagination']) {
-            if ($queryParams['currentPage'] < $query->max_num_pages) {
-                $nextPage = $queryParams['currentPage'] + 1;
-            }
-            $prevPage = $queryParams['currentPage'] - 1;
-        }
+        $prevPage = $queryParams['currentPage'] - 1;
 
         return [
             'posts'      => $posts,
