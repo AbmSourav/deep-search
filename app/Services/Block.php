@@ -4,7 +4,6 @@ namespace DeepSearch\App\Services;
 
 use Codesvault\Validator\Validator;
 use DeepSearch\App\Lib\BaseService;
-use DeepSearch\App\Lib\SingleTon;
 use WP_Query;
 use WP_REST_Request;
 
@@ -12,8 +11,6 @@ if (! defined('ABSPATH')) exit;
 
 class Block implements BaseService
 {
-    use SingleTon;
-
     public function register()
     {
         add_action('init', [$this, 'registerBlocks']);

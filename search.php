@@ -27,4 +27,4 @@ define('DS_PLUGIN_URL', plugins_url('/', __FILE__));
 
 require __DIR__ . '/vendor/autoload.php';
 
-Core::getInstance();
+new Core();
