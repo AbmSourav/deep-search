@@ -6,7 +6,7 @@ if (! defined('ABSPATH')) exit;
 
 trait SingleTon
 {
-    private static $instance = null;
+    protected static $instance = null;
 
     public static function getInstance()
     {

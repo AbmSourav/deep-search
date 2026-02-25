@@ -26,7 +26,7 @@ final class Core
         }
     }
 
-    private function services(): array
+    protected function services(): array
     {
         return [
             AssetsManager::class,

@@ -67,7 +67,7 @@ class Block implements BaseService
         return ob_get_clean();
     }
 
-    private function categoryList(): array
+    protected function categoryList(): array
     {
         $categories = get_categories([
             'orderby'    => 'name',
@@ -90,7 +90,7 @@ class Block implements BaseService
         return $list;
     }
 
-    private function postTypeList(): array
+    protected function postTypeList(): array
     {
         $postTypes = get_post_types(
             ['public' => true, 'show_ui' => true],
@@ -110,7 +110,7 @@ class Block implements BaseService
         return $list;
     }
 
-    private function tagList(): array
+    protected function tagList(): array
     {
         $tags = get_tags([
             'orderby'    => 'name',
@@ -215,7 +215,7 @@ class Block implements BaseService
         ], 200);
     }
 
-    private function query($queryParams)
+    protected function query($queryParams)
     {
         $searchConfigs = get_option('ds_configs');
         $args = [

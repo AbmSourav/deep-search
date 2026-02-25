@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version 1.0.0
+ * @version 1.1.0
  * @package deep-search
  *
  * Plugin Name: Deep Search
@@ -21,7 +21,7 @@ use DeepSearch\App\Core;
 
 if (! defined('ABSPATH')) exit;
 
-define('DS_VERSION', '1.0.0');
+define('DS_VERSION', '1.1.0');
 define('DS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('DS_PLUGIN_URL', plugins_url('/', __FILE__));
 
