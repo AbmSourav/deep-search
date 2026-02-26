@@ -24,7 +24,7 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
 
         // if rest-api is not enabled then do the ajax request
         if (res?.status > 399) {
-            const ajaxRes = await ajaxRequest(props, query)
+            const ajaxRes = await ajaxRequest(props, queryData)
             if (ajaxRes?.status === 200) {
                 resData = await ajaxRes.json()
             }

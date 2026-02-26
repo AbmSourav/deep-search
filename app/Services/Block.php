@@ -254,16 +254,31 @@ class Block implements BaseService
             wp_reset_postdata();
         }
 
-        $nextPage = 0;
-        $prevPage = 0;
-        if ($queryParams['currentPage'] < $query->max_num_pages) {
-            $nextPage = $queryParams['currentPage'] + 1;
-        }
-        $prevPage = $queryParams['currentPage'] - 1;
-
         return [
             'posts'      => $posts,
             'totalPosts' => $query->found_posts,
+            ...$this->pagination($searchConfigs, $query, $queryParams),
+        ];
+    }
+
+    protected function pagination($searchConfigs, $query, $params)
+    {
+        $nextPage = 0;
+        $prevPage = 0;
+        if (! empty($searchConfigs['show_pagination'])) {
+            if ($params['currentPage'] < $query->max_num_pages) {
+                $nextPage = $params['currentPage'] + 1;
+            }
+            $prevPage = $params['currentPage'] - 1;
+        }
+        if (empty($searchConfigs)) {
+            if ($params['currentPage'] < $query->max_num_pages) {
+                $nextPage = $params['currentPage'] + 1;
+            }
+            $prevPage = $params['currentPage'] - 1;
+        }
+
+        return [
             'totalPage'  => $query->max_num_pages,
             'nextPage'   => $nextPage,
             'prevPage'   => $prevPage,
