@@ -69,4 +69,6 @@ function commonWordPressMocks(): void
     });
 
     Functions\when('wp_reset_postdata')->justReturn(null);
+    Functions\when('wp_validate_boolean')->alias(fn ($value) => (bool) $value);
+    Functions\when('register_rest_route')->justReturn(true);
 }

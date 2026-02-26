@@ -19,7 +19,7 @@ final class Core
     public function boot()
     {
         foreach ($this->services() as $service) {
-            (new $service)->register();
+            (new $service())->register();
         }
     }
 

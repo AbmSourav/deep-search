@@ -12,6 +12,7 @@ use DeepSearch\Tests\TestCase;
 require_once __DIR__ . '/MocksAndStubs/WpDieException.php';
 require_once __DIR__ . '/MocksAndStubs/CommonMocks.php';
 require_once __DIR__ . '/MocksAndStubs/WPQueryStub.php';
+require_once __DIR__ . '/MocksAndStubs/WPRestStub.php';
 
 /*
 |--------------------------------------------------------------------------

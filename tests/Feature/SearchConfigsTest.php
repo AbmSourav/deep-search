@@ -11,13 +11,7 @@ use DeepSearch\App\Services\SearchConfigs;
 use DeepSearch\Tests\MocksAndStubs\WpDieException;
 
 beforeEach(function () {
-    // Reset singleton instance between tests
-    $reflection = new ReflectionClass(SearchConfigs::class);
-    $instance = $reflection->getProperty('instance');
-    $instance->setValue(null, null);
-
-    // Set up shared test context
-    $this->searchConfigs = SearchConfigs::getInstance();
+    $this->searchConfigs = new SearchConfigs();
 });
 
 /*
@@ -81,7 +75,7 @@ it('returns validation error when nonce is missing - setConfigurations', functio
     }
 });
 
-it('returns validation error when configs is missing - setConfigurations', function () {
+it('saves with defaults when optional configs are missing - setConfigurations', function () {
     $_POST = [
         'nonce'  => 'test_nonce',
         'action' => 'setConfigurations',
@@ -92,9 +86,9 @@ it('returns validation error when configs is missing - setConfigurations', funct
         $this->fail('Expected WpDieException to be thrown');
     } catch (WpDieException $e) {
         $data = $e->getResponseData();
-        expect($data['success'])->toBeFalse();
-        expect($data['data']['message'])->toBe('Validation error');
-        expect($e->statusCode)->toBe(403);
+        expect($data['success'])->toBeTrue();
+        expect($data['data']['message'])->toBe('Configs stored');
+        expect($e->statusCode)->toBe(200);
     }
 });
 

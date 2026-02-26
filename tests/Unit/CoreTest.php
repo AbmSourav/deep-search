@@ -42,12 +42,6 @@ it('Core class is final', function () {
     expect($reflection->isFinal())->toBeTrue();
 });
 
-it('Core class uses SingleTon trait', function () {
-    $traits = class_uses(Core::class);
-
-    expect($traits)->toContain('DeepSearch\App\Lib\SingleTon');
-});
-
 /*
 |--------------------------------------------------------------------------
 | Base Library Classes Tests

@@ -23,9 +23,9 @@ class SearchConfigs implements BaseService
     {
         $validator = Validator::validate(
             [
-                'nonce'   => 'required|string',
-                'action'  => 'required|stringOnly',
-                'postPerPage' => 'integer',
+                'nonce'          => 'required|string',
+                'action'         => 'required|stringOnly',
+                'postPerPage'    => 'integer',
                 'showPagination' => 'bool',
             ],
             $_POST

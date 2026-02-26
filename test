@@ -6,6 +6,7 @@ PLUGIN_PATH="/var/www/html/wp-content/plugins/deep-search"
 # Usage: ./test [command] [args]
 # Commands:
 #   (no args)     - Sync files and run Pest
+#   composer-install - install composer dependencies in test container
 #   copy <path>   - Copy a file/folder from host to container
 #   pull <path>   - Copy a file/folder from container to host
 #   pest [args]   - Run Pest with optional arguments
@@ -13,10 +14,13 @@ PLUGIN_PATH="/var/www/html/wp-content/plugins/deep-search"
 #   sync-vendor   - Copy vendor from container to vendor-test for IDE support
 
 case "$1" in
-    sync-vendor)
-        rm -rf ./vendor-test
-        docker cp "$CONTAINER:$PLUGIN_PATH/vendor" ./vendor-test
-        echo "Synced vendor to vendor-test for IDE support"
+    composer-install)
+        docker cp ./composerTest.json "$CONTAINER:$PLUGIN_PATH/composer.json"
+        if [ -t 0 ]; then
+            docker exec -it "$CONTAINER" bash -c "cd $PLUGIN_PATH && composer install"
+        else
+            docker exec "$CONTAINER" bash -c "cd $PLUGIN_PATH && composer install"
+        fi
         ;;
     copy)
         if [ -z "$2" ]; then
@@ -50,6 +54,9 @@ case "$1" in
         else
             docker exec "$CONTAINER" bash -c "cd $PLUGIN_PATH && $*"
         fi
+        ;;
+    sync-vendor)
+        docker cp -a "$CONTAINER:$PLUGIN_PATH/vendor/." vendor-test
         ;;
     *)
         # Default: sync and run pest

@@ -11,13 +11,7 @@ use DeepSearch\App\Services\Block;
 use DeepSearch\Tests\MocksAndStubs\WpDieException;
 
 beforeEach(function () {
-    // Reset singleton instance between tests
-    $reflection = new ReflectionClass(Block::class);
-    $instance = $reflection->getProperty('instance');
-    $instance->setValue(null, null);
-
-    // Set up shared test context
-    $this->block = Block::getInstance();
+    $this->block = new Block();
     $this->reflection = new ReflectionClass($this->block);
 });
 
@@ -41,6 +35,10 @@ it('registers actions', function () {
         ->once()
         ->with(\Mockery::type('array'), 10, 1);
 
+    Actions\expectAdded('rest_api_init')
+        ->once()
+        ->with(\Mockery::type('array'), 10, 1);
+
     Actions\expectAdded('wp_ajax_search')
         ->once()
         ->with(\Mockery::type('array'), 10, 1);
@@ -49,7 +47,7 @@ it('registers actions', function () {
         ->once()
         ->with(\Mockery::type('array'), 10, 1);
 
-    Block::getInstance()->register();
+    $this->block->register();
 });
 
 /*
@@ -74,7 +72,7 @@ it('registers deep-search block', function () {
             \Mockery::on(fn ($args) => isset($args['render_callback']))
         );
 
-    Block::getInstance()->registerBlocks();
+    $this->block->registerBlocks();
 });
 
 /*
@@ -96,7 +94,7 @@ it('renders the block view file', function () {
         'showTag'      => false,
     ];
 
-    $output = Block::getInstance()->renderBlock($blockAttributes, '');
+    $output = $this->block->renderBlock($blockAttributes, '');
 
     expect($output)->toContain('<div class="ds-root" data-block="');
 });
@@ -206,6 +204,90 @@ it('returns formatted tags array - tagList', function () {
 
 /*
 |--------------------------------------------------------------------------
+| restApi Method Tests
+|--------------------------------------------------------------------------
+*/
+
+it('registers REST route with correct parameters', function () {
+    $captured = null;
+    Functions\when('register_rest_route')->alias(function ($namespace, $route, $args) use (&$captured) {
+        $captured = ['namespace' => $namespace, 'route' => $route, 'args' => $args];
+        return true;
+    });
+
+    $this->block->restApi();
+
+    expect($captured)->not->toBeNull();
+    expect($captured['namespace'])->toBe('deep-search/v1');
+    expect($captured['route'])->toBe('/search');
+    expect($captured['args']['methods'])->toBe('POST');
+    expect($captured['args']['permission_callback'])->toBe('__return_true');
+    expect($captured['args']['callback'])->toBeArray();
+});
+
+/*
+|--------------------------------------------------------------------------
+| restSearch Method Tests
+|--------------------------------------------------------------------------
+*/
+
+it('returns 400 when query param is missing - restSearch', function () {
+    $request = new WP_REST_Request('POST', '/deep-search/v1/search');
+
+    $response = $this->block->restSearch($request);
+
+    expect($response)->toBeInstanceOf(WP_REST_Response::class);
+    expect($response->get_status())->toBe(400);
+    expect($response->get_data()['message'])->toBe('Missing parameter');
+});
+
+it('returns validation error for invalid query data - restSearch', function () {
+    $request = new WP_REST_Request('POST', '/deep-search/v1/search');
+    $request->set_param('query', ['s' => 123]);
+
+    try {
+        $this->block->restSearch($request);
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeFalse();
+        expect($data['data']['message'])->toBe('Validation error');
+        expect($e->statusCode)->toBe(403);
+    }
+});
+
+it('returns posts data on successful search - restSearch', function () {
+    $request = new WP_REST_Request('POST', '/deep-search/v1/search');
+    $request->set_param('query', ['s' => 'test', 'currentPage' => 1]);
+
+    $response = $this->block->restSearch($request);
+
+    expect($response)->toBeInstanceOf(WP_REST_Response::class);
+    expect($response->get_status())->toBe(200);
+    expect($response->get_data())->toHaveKey('data');
+    expect($response->get_data()['data'])->toHaveKeys([
+        'posts', 'totalPosts', 'totalPage', 'nextPage', 'prevPage'
+    ]);
+});
+
+it('handles search with filters - restSearch', function () {
+    $request = new WP_REST_Request('POST', '/deep-search/v1/search');
+    $request->set_param('query', [
+        's'         => 'test',
+        'postTypes' => 'post,page',
+        'cats'      => '1,2',
+        'tags'      => '3,4',
+    ]);
+
+    $response = $this->block->restSearch($request);
+
+    expect($response)->toBeInstanceOf(WP_REST_Response::class);
+    expect($response->get_status())->toBe(200);
+    expect($response->get_data()['data']['posts'])->toBeArray();
+});
+
+/*
+|--------------------------------------------------------------------------
 | search Method Tests
 |--------------------------------------------------------------------------
 */
@@ -307,10 +389,10 @@ it('returns posts data on successful search - search', function () {
 |--------------------------------------------------------------------------
 */
 
-it('query method is private', function () {
+it('query method is protected', function () {
     $method = $this->reflection->getMethod('query');
 
-    expect($method->isPrivate())->toBeTrue();
+    expect($method->isProtected())->toBeTrue();
     expect($method->getNumberOfParameters())->toBe(1);
 });
 

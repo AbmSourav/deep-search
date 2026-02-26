@@ -5,10 +5,7 @@ use Brain\Monkey\Actions;
 use DeepSearch\App\Services\AdminMenu;
 
 beforeEach(function () {
-    // Reset singleton instance between tests
-    $reflection = new ReflectionClass(AdminMenu::class);
-    $instance = $reflection->getProperty('instance');
-    $instance->setValue(null, null);
+    $this->adminMenu = new AdminMenu();
 });
 
 /*
@@ -29,8 +26,7 @@ it('registers admin_menu action when in admin', function () {
         ->once()
         ->with(\Mockery::type('array'), 10, 1);
 
-    $adminMenu = AdminMenu::getInstance();
-    $adminMenu->register();
+    $this->adminMenu->register();
 });
 
 it('does not register admin_menu action when not in admin', function () {
@@ -38,8 +34,7 @@ it('does not register admin_menu action when not in admin', function () {
 
     Actions\expectAdded('admin_menu')->never();
 
-    $adminMenu = AdminMenu::getInstance();
-    $adminMenu->register();
+    $this->adminMenu->register();
 });
 
 it('adds menu page with correct parameters', function () {
@@ -55,8 +50,7 @@ it('adds menu page with correct parameters', function () {
             30
         );
 
-    $adminMenu = AdminMenu::getInstance();
-    $adminMenu->addMenu();
+    $this->adminMenu->addMenu();
 });
 
 /*
@@ -70,11 +64,9 @@ it('has admin view file', function () {
 });
 
 it('renders admin page by requiring the view file', function () {
-    $adminMenu = AdminMenu::getInstance();
-
     // Start output buffering to capture output from the view
     ob_start();
-    $adminMenu->renderAdminPage();
+    $this->adminMenu->renderAdminPage();
     $output = ob_get_clean();
 
     // The view file should be included and produce the expected HTML structure
