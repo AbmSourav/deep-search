@@ -9,6 +9,7 @@ const DeepSearch = ({ props }) => {
     const [queryData, setQueryData] = useState({})
     const [queryRes, setQueryRes] = useState({})
     const [wrapHeight, setWrapHeight] = useState(null)
+    const [isRestDisabled, setIsRestDisabled] = useState(false)
     const wrapRef = useRef(null)
 
     const classNames = focusStatus ? 'ds-wrap active' : 'ds-wrap'
@@ -41,27 +42,25 @@ const DeepSearch = ({ props }) => {
                     <SearchBar
                     props={props}
                     setFocusStatus={setFocusStatus}
-                    queryData={queryData}
-                    setQueryData={setQueryData}
+                    queryState={{queryData, setQueryData}}
                     setQueryRes={setQueryRes}
                     elmHeight={wrapRef}
+                    rest={{isRestDisabled, setIsRestDisabled}}
                     />
                 }
                 {focusStatus && !queryRes?.loading && Object.keys(queryRes).length === 0 &&
                     <SearchOptions
                     props={props}
-                    queryData={queryData}
-                    setQueryData={setQueryData}
+                    queryState={{queryData, setQueryData}}
                     />
                 }
 
                 {focusStatus && (queryRes?.loading || Object.keys(queryRes).length > 0) &&
                     <PostList
                     props={props}
-                    queryRes={queryRes}
-                    setQueryRes={setQueryRes}
-                    setQueryData={setQueryData}
-                    queryData={queryData}
+                    resData={{queryRes, setQueryRes}}
+                    queryState={{queryData, setQueryData}}
+                    rest={{isRestDisabled, setIsRestDisabled}}
                     />
                 }
             </div>

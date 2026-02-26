@@ -3,8 +3,11 @@ import { __ } from '@wordpress/i18n';
 
 import { ajaxRequest, restApiRequest, adjustColor } from '../helper';
 
-const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => {
+const PostList = ({ props, resData, queryState, rest}) => {
     const { attibutes } = props
+    const { queryData, setQueryData } = queryState
+    const { isRestDisabled, setIsRestDisabled } = rest
+    const { queryRes, setQueryRes } = resData
 
     const handleClose = () => {
         setQueryData({})
@@ -16,14 +19,20 @@ const PostList = ({ props, queryRes, setQueryRes , setQueryData, queryData}) => 
         queryData['currentPage'] = currentPage
         setQueryData({...queryData})
         let resData = null
+        let restFailed = isRestDisabled
 
-        const res = await restApiRequest(queryData)
-        if (res?.status === 200) {
-            resData = await res.json()
+        if (restFailed === false) {
+            const restRes = await restApiRequest(queryData)
+            if (restRes?.status === 200) {
+                resData = await restRes.json()
+            } else if (restRes?.status > 399) {
+                restFailed = true
+                setIsRestDisabled(true)
+            }
         }
 
         // if rest-api is not enabled then do the ajax request
-        if (res?.status > 399) {
+        if (restFailed) {
             const ajaxRes = await ajaxRequest(props, queryData)
             if (ajaxRes?.status === 200) {
                 resData = await ajaxRes.json()

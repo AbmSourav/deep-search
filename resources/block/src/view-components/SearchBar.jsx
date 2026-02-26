@@ -3,9 +3,11 @@ import { __ } from '@wordpress/i18n';
 
 import { ajaxRequest, restApiRequest, adjustColor } from '../helper';
 
-const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes, elmHeight }) => {
+const SearchBar = ({ props, setFocusStatus, queryState, setQueryRes, elmHeight, rest }) => {
     const [ searchKey, setSearchKey ] = useState('')
     const { attibutes } = props
+    const { queryData, setQueryData } = queryState
+    const { isRestDisabled, setIsRestDisabled } = rest
 
     const isQueryDataEmpty = () => {
         let isEmpty = false
@@ -35,14 +37,20 @@ const SearchBar = ({ props, setFocusStatus, queryData, setQueryData, setQueryRes
         const query = {...queryData, s: searchKey, currentPage: 1}
         setQueryData(query)
         let resData = null
+        let restFailed = isRestDisabled
 
-        const res = await restApiRequest(query)
-        if (res?.status === 200) {
-            resData = await res.json()
+        if (restFailed === false) {
+            const restRes = await restApiRequest(query)
+            if (restRes?.status === 200) {
+                resData = await restRes.json()
+            } else if (restRes?.status > 399) {
+                restFailed = true
+                setIsRestDisabled(true)
+            }
         }
 
         // if rest-api is not enabled then do the ajax request
-        if (res?.status > 399) {
+        if (restFailed) {
             const ajaxRes = await ajaxRequest(props, query)
             if (ajaxRes?.status === 200) {
                 resData = await ajaxRes.json()

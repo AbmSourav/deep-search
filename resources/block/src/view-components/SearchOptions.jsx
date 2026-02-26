@@ -6,10 +6,11 @@ import { __ } from '@wordpress/i18n';
 
 import { adjustColor } from '../helper';
 
-const SearchOptions = ({ props, queryData, setQueryData }) => {
+const SearchOptions = ({ props, queryState }) => {
     const { postTypes, categories, tags, attibutes } = props
     const containerRef = useRef(null);
     const [emotionCache, setEmotionCache] = useState(null);
+    const { queryData, setQueryData } = queryState
 
     useEffect(() => {
         if (containerRef.current) {
