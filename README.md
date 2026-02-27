@@ -48,12 +48,11 @@ deep-search/
 ├── app/                               # PHP application code
 │   ├── Core.php                       # Plugin core initialization
 │   ├── Lib/                           # Library classes
-│   │   ├── BaseService.php            # Base service class
-│   │   └── SingleTon.php              # Singleton trait
+│   │   └── BaseService.php            # Service interface
 │   └── Services/                      # Service classes
 │       ├── AdminMenu.php              # Admin menu registration
 │       ├── AssetsManager.php          # Asset loading management
-│       ├── Block.php                  # Gutenberg block registration
+│       ├── Block.php                  # Block registration, REST API & AJAX search
 │       └── SearchConfigs.php          # Search configuration handler
 ├── resources/                         # Frontend resources
 │   ├── admin/                         # Admin panel assets
@@ -67,21 +66,31 @@ deep-search/
 │       ├── src/                       # Block source files
 │       │   ├── index.js               # Block entry point
 │       │   ├── edit.js                # Block editor component
+│       │   ├── helper.js              # REST/AJAX request helpers & color utils
 │       │   ├── style.scss             # Block styles
 │       │   ├── view.js                # Frontend view entry
+│       │   ├── editor-components/     # Editor-only React components
+│       │   │   └── SettingsControl.jsx # Block settings panel
 │       │   └── view-components/       # Frontend React components
 │       │       ├── DeepSearch.jsx     # Main search component
 │       │       ├── SearchBar.jsx      # Search input component
-│       │       ├── SearchOptions.jsx  # Search options component
+│       │       ├── SearchOptions.jsx  # Search filter options component
 │       │       └── PostList.jsx       # Search results component
 │       ├── block.json                 # Block configuration
 │       ├── build/                     # Compiled block assets
 │       └── view.php                   # Block render template
-├── tests/                             # Test files
+├── tests/                             # Test files (Pest/PHPUnit)
 │   ├── Feature/                       # Feature tests
-│   │   └── AdminMenuTest.php          # Admin menu tests
+│   │   ├── AdminMenuTest.php          # Admin menu tests
+│   │   ├── BlockTest.php              # Block, REST API & search tests
+│   │   └── SearchConfigsTest.php      # Search configs tests
 │   ├── Unit/                          # Unit tests
 │   │   └── CoreTest.php               # Core class tests
+│   ├── MocksAndStubs/                 # Test doubles
+│   │   ├── CommonMocks.php            # Shared WordPress function mocks
+│   │   ├── WPQueryStub.php            # WP_Query stub
+│   │   ├── WPRestStub.php             # WP_REST_Request/Response stubs
+│   │   └── WpDieException.php         # Exception for wp_send_json_* mocking
 │   ├── Pest.php                       # Pest configuration
 │   ├── TestCase.php                   # Base test case class
 │   └── _ide_helper.php                # IDE helper for tests
