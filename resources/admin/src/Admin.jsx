@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { ToggleControl, Button, Notice, __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { ToggleControl, Button, Notice, TabPanel, __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const Admin = () => {
     const [ showPagination, setShowPagination ] = useState(1)
     const [ postPerPage, setPostPerPage ] = useState(5)
+    const [ cacheEnabled, setCacheEnabled ] = useState(1)
+    const [ cacheTtl, setCacheTtl ] = useState(15)
     const [ isSubmitting, setisSubmitting ] = useState(false)
+    const [ isClearingCache, setIsClearingCache ] = useState(false)
     const [ notice, setNotice ] = useState({ show: false, type: '', message: '' });
 
     useEffect(() => {
@@ -19,8 +22,11 @@ const Admin = () => {
         })
         .then((res => res.json()))
         .then(data => {
-            setPostPerPage(parseInt(data?.data?.configs?.posts_per_page))
-            setShowPagination(data?.data?.configs?.show_pagination)
+            const configs = data?.data?.configs
+            setPostPerPage(parseInt(configs?.posts_per_page))
+            setShowPagination(configs?.show_pagination == true ? 1 : 0)
+            setCacheEnabled(configs?.cache_enabled == true ? 1 : 0)
+            setCacheTtl(parseInt(configs?.cache_ttl) || 15)
         })
         .catch(error => {
             console.error(error)
@@ -28,7 +34,7 @@ const Admin = () => {
     }, [])
 
     const handleShowPagination = (val) => {
-        const paginationView = val === true ? 1 : 0
+        const paginationView = val == true ? 1 : 0
         setShowPagination(paginationView)
     }
 
@@ -36,18 +42,40 @@ const Admin = () => {
         setPostPerPage(value)
     }
 
+    const handleClearCache = () => {
+        setIsClearingCache(true)
+        const form = new FormData()
+        form.append('action', 'dsClearCache');
+        form.append('nonce', dsAdmin?.nonce);
+
+        fetch(dsAdmin?.ajaxUrl, {
+            method: 'POST',
+            body: form,
+        })
+        .then((res => res.json()))
+        .then(() => {
+            setNotice({
+                show: true,
+                type: 'success',
+                message: __('Cache cleared', 'deep-search')
+            });
+        })
+        .catch(error => console.error(error))
+        .finally(() => setIsClearingCache(false))
+    }
+
     const handleSubmit = () => {
         setisSubmitting(true)
-        const configs = {postPerPage, showPagination}
 
         const form = new FormData()
         form.append('action', 'setConfigurations');
-        form.append('nonce', dsAdmin.nonce);
+        form.append('nonce', dsAdmin?.nonce);
         form.append('postPerPage', postPerPage)
         form.append('showPagination', showPagination)
-        console.log('showPagination', showPagination)
+        form.append('cacheEnabled', cacheEnabled)
+        form.append('cacheTtl', cacheTtl)
 
-        fetch(dsAdmin.ajaxUrl, {
+        fetch(dsAdmin?.ajaxUrl, {
             method: 'POST',
             body: form,
         })
@@ -79,42 +107,110 @@ const Admin = () => {
         )}
 
         <div className="ds-configs">
-            <h2>{__('Configurations', 'deep-search')}</h2>
-
-            <div className="ds-configs__config">
-                <div className="ds-configs__config-label">
-                    {__('Show Pagination', 'deep-search')}
-                </div>
-                <ToggleControl
-                    label=''
-                    checked={showPagination == 1 ? true : false}
-                    onChange={handleShowPagination}
-                    __nextHasNoMarginBottom={true}
-                />
-            </div>
-
-            <div className="ds-configs__config">
-                <div className="ds-configs__config-label">
-                    {__('Posts per page', 'deep-search')}
-                </div>
-                <NumberControl
-                value={postPerPage}
-                onChange={handlePostPerPage}
-                min={1}
-                max={20}
-                __next40pxDefaultSize
-                />
-            </div>
-
-            <Button
-            type='button'
-            disabled={isSubmitting}
-            isBusy={isSubmitting}
-            className='ds-configs__save'
-            onClick={handleSubmit}
+            <TabPanel
+                tabs={[
+                    { name: 'configurations', title: __('Configurations', 'deep-search') },
+                    { name: 'cache', title: __('Cache', 'deep-search') },
+                ]}
             >
-                {__('Save', 'deep-search')}
-            </Button>
+                {(tab) => (
+                    <div className="ds-configs__tab-content">
+                        {tab.name === 'configurations' && (
+                            <>
+                                <div className="ds-configs__config">
+                                    <div className="ds-configs__config-label">
+                                        {__('Show Pagination', 'deep-search')}
+                                    </div>
+                                    <ToggleControl
+                                        label=''
+                                        checked={showPagination == 1 ? true : false}
+                                        onChange={handleShowPagination}
+                                        __nextHasNoMarginBottom={true}
+                                    />
+                                </div>
+
+                                <div className="ds-configs__config">
+                                    <div className="ds-configs__config-label">
+                                        {__('Posts per page', 'deep-search')}
+                                    </div>
+                                    <NumberControl
+                                    value={postPerPage}
+                                    onChange={handlePostPerPage}
+                                    min={1}
+                                    max={20}
+                                    __next40pxDefaultSize
+                                    />
+                                </div>
+
+                                <div className="ds-configs__actions">
+                                    <Button
+                                    type='button'
+                                    disabled={isSubmitting}
+                                    isBusy={isSubmitting}
+                                    className='ds-configs__save'
+                                    onClick={handleSubmit}
+                                    >
+                                        {__('Save', 'deep-search')}
+                                    </Button>
+                                </div>
+                            </>
+                        )}
+
+                        {tab.name === 'cache' && (
+                            <>
+                                <div className="ds-configs__config">
+                                    <div className="ds-configs__config-label">
+                                        {__('Enable Cache', 'deep-search')}
+                                    </div>
+                                    <ToggleControl
+                                        label=''
+                                        checked={cacheEnabled == 1}
+                                        onChange={(val) => setCacheEnabled(val === true ? 1 : 0)}
+                                        __nextHasNoMarginBottom={true}
+                                    />
+                                </div>
+
+                                {cacheEnabled == 1 &&
+                                    <div className="ds-configs__config">
+                                        <div className="ds-configs__config-label">
+                                            {__('Cache Duration (minutes)', 'deep-search')}
+                                        </div>
+                                        <NumberControl
+                                        value={cacheTtl}
+                                        onChange={(value) => setCacheTtl(value)}
+                                        min={1}
+                                        max={1440}
+                                        __next40pxDefaultSize
+                                        />
+                                    </div>
+                                }
+
+                                <div className="ds-configs__actions">
+                                    <Button
+                                    type='button'
+                                    disabled={isSubmitting}
+                                    isBusy={isSubmitting}
+                                    className='ds-configs__save'
+                                    onClick={handleSubmit}
+                                    >
+                                        {__('Save', 'deep-search')}
+                                    </Button>
+
+                                    <Button
+                                    type='button'
+                                    disabled={isClearingCache}
+                                    isBusy={isClearingCache}
+                                    className='ds-configs__clear-cache'
+                                    onClick={handleClearCache}
+                                    >
+                                        {__('Clear Cache', 'deep-search')}
+                                    </Button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
+            </TabPanel>
         </div>
         </>
     )

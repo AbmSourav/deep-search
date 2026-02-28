@@ -17,6 +17,7 @@ class SearchConfigs implements BaseService
 
         add_action('wp_ajax_setConfigurations', [$this, 'setConfigurations']);
         add_action('wp_ajax_getConfigurations', [$this, 'getConfigurations']);
+        add_action('wp_ajax_dsClearCache', [$this, 'clearCache']);
     }
 
     public function setConfigurations()
@@ -27,6 +28,8 @@ class SearchConfigs implements BaseService
                 'action'         => 'required|stringOnly',
                 'postPerPage'    => 'integer',
                 'showPagination' => 'bool',
+                'cacheEnabled'   => 'bool',
+                'cacheTtl'       => 'integer',
             ],
             $_POST
         );
@@ -52,10 +55,17 @@ class SearchConfigs implements BaseService
 
         $postPerPage = $data['postPerPage'] ?? 5;
         $showPagination = $data['showPagination'] ?? 1;
+        $cacheEnabled = $data['cacheEnabled'] ?? 1;
+        $cacheTtl = $data['cacheTtl'] ?? 15;
         update_option('ds_configs', [
             'posts_per_page'  => absint($postPerPage),
-            'show_pagination' => wp_validate_boolean($showPagination)
+            'show_pagination' => wp_validate_boolean($showPagination),
+            'cache_enabled'   => wp_validate_boolean($cacheEnabled),
+            'cache_ttl'       => absint($cacheTtl),
         ]);
+
+        // Invalidate search cache when configs change
+        (new Block)->invalidateSearchCache();
 
         wp_send_json_success([
            'message' => 'Configs stored',
@@ -95,12 +105,52 @@ class SearchConfigs implements BaseService
         if (! $configs || empty($configs)) {
             $configs = [
                 'posts_per_page'  => 5,
-                'show_pagination' => 1
+                'show_pagination' => 1,
+                'cache_enabled'   => 1,
+                'cache_ttl'       => 15,
             ];
         }
 
         wp_send_json_success([
             'configs' => $configs,
+        ]);
+    }
+
+    public function clearCache()
+    {
+        $validator = Validator::validate(
+            [
+                'nonce'  => 'required|string',
+                'action' => 'required|stringOnly',
+            ],
+            $_POST
+        );
+
+        $errors = $validator->error();
+        if ($errors) {
+            wp_send_json_error([
+                'message' => 'Validation error',
+                'errors'  => $errors
+            ], 403);
+        }
+
+        $data = $validator->getData();
+
+        if (
+            !isset($data['nonce']) ||
+            !wp_verify_nonce($data['nonce'], 'ds_admin_nonce')
+        ) {
+            wp_send_json_error([
+                'message' => 'Invalid security token.'
+            ], 403);
+        }
+
+        (new Block)->invalidateSearchCache();
+        delete_transient('ds_categories');
+        delete_transient('ds_tags');
+
+        wp_send_json_success([
+            'message' => 'Cache cleared',
         ]);
     }
 }

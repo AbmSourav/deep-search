@@ -40,6 +40,10 @@ it('registers ajax actions when in admin', function () {
         ->once()
         ->with(\Mockery::type('array'), 10, 1);
 
+    Actions\expectAdded('wp_ajax_dsClearCache')
+        ->once()
+        ->with(\Mockery::type('array'), 10, 1);
+
     $this->searchConfigs->register();
 });
 
@@ -48,6 +52,7 @@ it('does not register ajax actions when not in admin', function () {
 
     Actions\expectAdded('wp_ajax_setConfigurations')->never();
     Actions\expectAdded('wp_ajax_getConfigurations')->never();
+    Actions\expectAdded('wp_ajax_dsClearCache')->never();
 
     $this->searchConfigs->register();
 });
@@ -188,6 +193,8 @@ it('returns default configs when no configs saved - getConfigurations', function
         expect($data['data']['configs'])->toBe([
             'posts_per_page'  => 5,
             'show_pagination' => 1,
+            'cache_enabled'   => 1,
+            'cache_ttl'       => 15,
         ]);
         expect($e->statusCode)->toBe(200);
     }
@@ -213,6 +220,64 @@ it('returns saved configs - getConfigurations', function () {
         $data = $e->getResponseData();
         expect($data['success'])->toBeTrue();
         expect($data['data']['configs'])->toBe($savedConfigs);
+        expect($e->statusCode)->toBe(200);
+    }
+});
+
+/*
+|--------------------------------------------------------------------------
+| clearCache Method Tests
+|--------------------------------------------------------------------------
+*/
+
+it('returns validation error when nonce is missing - clearCache', function () {
+    $_POST = [
+        'action' => 'dsClearCache',
+    ];
+
+    try {
+        $this->searchConfigs->clearCache();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeFalse();
+        expect($data['data']['message'])->toBe('Validation error');
+        expect($e->statusCode)->toBe(403);
+    }
+});
+
+it('returns error when nonce verification fails - clearCache', function () {
+    $_POST = [
+        'nonce'  => 'invalid_nonce',
+        'action' => 'dsClearCache',
+    ];
+
+    Functions\when('wp_verify_nonce')->justReturn(false);
+
+    try {
+        $this->searchConfigs->clearCache();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeFalse();
+        expect($data['data']['message'])->toBe('Invalid security token.');
+        expect($e->statusCode)->toBe(403);
+    }
+});
+
+it('clears cache successfully - clearCache', function () {
+    $_POST = [
+        'nonce'  => 'valid_nonce',
+        'action' => 'dsClearCache',
+    ];
+
+    try {
+        $this->searchConfigs->clearCache();
+        $this->fail('Expected WpDieException to be thrown');
+    } catch (WpDieException $e) {
+        $data = $e->getResponseData();
+        expect($data['success'])->toBeTrue();
+        expect($data['data']['message'])->toBe('Cache cleared');
         expect($e->statusCode)->toBe(200);
     }
 });

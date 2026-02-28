@@ -71,4 +71,21 @@ function commonWordPressMocks(): void
     Functions\when('wp_reset_postdata')->justReturn(null);
     Functions\when('wp_validate_boolean')->alias(fn ($value) => (bool) $value);
     Functions\when('register_rest_route')->justReturn(true);
+
+    // Transient functions
+    Functions\when('get_transient')->justReturn(false);
+    Functions\when('set_transient')->justReturn(true);
+    Functions\when('delete_transient')->justReturn(true);
+
+    // Post revision/autosave checks
+    Functions\when('wp_is_post_revision')->justReturn(false);
+    Functions\when('wp_is_post_autosave')->justReturn(false);
+
+    // Global $wpdb mock
+    global $wpdb;
+    $wpdb = \Mockery::mock('wpdb');
+    $wpdb->options = 'wp_options';
+    $wpdb->shouldReceive('esc_like')->andReturnUsing(fn ($text) => addcslashes($text, '_%\\'));
+    $wpdb->shouldReceive('prepare')->andReturnUsing(fn ($query, ...$args) => vsprintf(str_replace('%s', "'%s'", $query), $args));
+    $wpdb->shouldReceive('query')->andReturn(0);
 }

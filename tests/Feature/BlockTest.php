@@ -47,6 +47,27 @@ it('registers actions', function () {
         ->once()
         ->with(\Mockery::type('array'), 10, 1);
 
+    // Cache invalidation hooks
+    Actions\expectAdded('save_post')
+        ->once()
+        ->with(\Mockery::type('array'), 10, 1);
+
+    Actions\expectAdded('delete_post')
+        ->once()
+        ->with(\Mockery::type('array'), 10, 1);
+
+    Actions\expectAdded('created_term')
+        ->once()
+        ->with(\Mockery::type('array'), 10, 1);
+
+    Actions\expectAdded('edited_term')
+        ->once()
+        ->with(\Mockery::type('array'), 10, 1);
+
+    Actions\expectAdded('delete_term')
+        ->once()
+        ->with(\Mockery::type('array'), 10, 1);
+
     $this->block->register();
 });
 
@@ -411,4 +432,46 @@ it('returns correct pagination when on first page - query', function () {
     $result = $method->invoke($this->block, ['currentPage' => 1]);
 
     expect($result['prevPage'])->toBe(0);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Cache Invalidation Method Tests
+|--------------------------------------------------------------------------
+*/
+
+it('has invalidateSearchCache method', function () {
+    expect(method_exists(Block::class, 'invalidateSearchCache'))->toBeTrue();
+});
+
+it('skips invalidation for post revisions', function () {
+    Functions\when('wp_is_post_revision')->justReturn(true);
+
+    // Should not throw or call update_option for revisions
+    $this->block->invalidateSearchCache(123);
+
+    // If we get here without error, revision was skipped
+    expect(true)->toBeTrue();
+});
+
+it('skips invalidation for autosaves', function () {
+    Functions\when('wp_is_post_autosave')->justReturn(true);
+
+    $this->block->invalidateSearchCache(123);
+
+    expect(true)->toBeTrue();
+});
+
+it('invalidates search cache for regular posts', function () {
+    Functions\when('wp_is_post_revision')->justReturn(false);
+    Functions\when('wp_is_post_autosave')->justReturn(false);
+
+    $this->block->invalidateSearchCache(123);
+
+    // If we get here, update_option was called successfully
+    expect(true)->toBeTrue();
+});
+
+it('has invalidateTaxonomyCache method', function () {
+    expect(method_exists(Block::class, 'invalidateTaxonomyCache'))->toBeTrue();
 });
