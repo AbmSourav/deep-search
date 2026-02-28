@@ -6,6 +6,29 @@ A Gutenberg-native advanced search block for WordPress with multi-filter support
 
 <br>
 
+## How It Works
+
+### Search Flow
+When a user submits a search query, the plugin first attempts a **REST API** request (`/deep-search/v1/search`). If the REST API is unavailable (e.g., blocked by a security plugin), it automatically falls back to **WordPress AJAX** (`admin-ajax.php`). This dual approach ensures the search works reliably across different hosting environments.
+
+### Block Rendering
+The search block is registered as a **dynamic Gutenberg block**. On the frontend, it renders a React-powered search interface with optional filters for post types, categories, and tags. In the editor, a settings panel lets users customize colors, font sizes, and toggle filter visibility.
+
+### Caching
+The plugin uses **WordPress transients** to cache search results and taxonomy lists (categories, tags), reducing database queries on repeated searches.
+
+- **Search results** are cached with keys based on the query arguments (`ds_q_{hash}`). Cache duration is configurable from the admin panel (default: 15 minutes).
+- **Categories and tags** are cached for 1 hour (`ds_categories`, `ds_tags`).
+- Cache is **automatically invalidated** when posts are created/updated/deleted or when terms (categories/tags) change.
+- Cache can also be **manually cleared** from the admin settings panel, or disabled entirely.
+
+### Admin Configuration
+An admin settings page (under the "Deep Search" menu) provides two tabs:
+- **Configurations** — posts per page, pagination toggle.
+- **Cache** — enable/disable caching, set cache duration, and clear cache manually.
+
+<br>
+
 ## Environment Requirements
 
 * PHP >= 8.1
