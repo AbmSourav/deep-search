@@ -17,6 +17,13 @@ class Block implements BaseService
         add_action('rest_api_init', [$this, 'restApi']);
         add_action('wp_ajax_search', [$this, 'search']);
         add_action('wp_ajax_nopriv_search', [$this, 'search']);
+
+        // Cache invalidation
+        add_action('save_post', [$this, 'invalidateSearchCache']);
+        add_action('delete_post', [$this, 'invalidateSearchCache']);
+        add_action('created_term', [$this, 'invalidateTaxonomyCache']);
+        add_action('edited_term', [$this, 'invalidateTaxonomyCache']);
+        add_action('delete_term', [$this, 'invalidateTaxonomyCache']);
     }
 
     public function registerBlocks()
@@ -66,6 +73,11 @@ class Block implements BaseService
 
     protected function categoryList(): array
     {
+        $cached = get_transient('ds_categories');
+        if ($cached !== false) {
+            return $cached;
+        }
+
         $categories = get_categories([
             'orderby'    => 'name',
             'hide_empty' => 1
@@ -83,6 +95,9 @@ class Block implements BaseService
                 'label'   => $category->name
             ];
         }
+
+        // store cache data
+        set_transient('ds_categories', $list, 3600);
 
         return $list;
     }
@@ -109,6 +124,11 @@ class Block implements BaseService
 
     protected function tagList(): array
     {
+        $cached = get_transient('ds_tags');
+        if ($cached !== false) {
+            return $cached;
+        }
+
         $tags = get_tags([
             'orderby'    => 'name',
             'hide_empty' => 1
@@ -126,6 +146,9 @@ class Block implements BaseService
                 'label'   => $tag->name
             ];
         }
+
+        // store cache data
+        set_transient('ds_tags', $list, 3600);
 
         return $list;
     }
@@ -215,6 +238,8 @@ class Block implements BaseService
     protected function query($queryParams)
     {
         $searchConfigs = get_option('ds_configs');
+        $cacheEnabled = $searchConfigs['cache_enabled'] ?? 1;
+
         $queryParams['currentPage'] = isset($queryParams['currentPage']) ? absint($queryParams['currentPage']) : 1;
         $args = [
             'post_status'    => 'publish',
@@ -238,6 +263,16 @@ class Block implements BaseService
             $args['tag__in'] = explode(',', $queryParams['tags']);
         }
 
+        // Check transient cache
+        $cacheKey = null;
+        if ($cacheEnabled) {
+            $cacheKey = 'ds_q_' . md5(wp_json_encode($args));
+            $cached = get_transient($cacheKey);
+            if ($cached !== false) {
+                return $cached;
+            }
+        }
+
         $query = new WP_Query($args);
 
         $posts = [];
@@ -254,11 +289,46 @@ class Block implements BaseService
             wp_reset_postdata();
         }
 
-        return [
+        $result = [
             'posts'      => $posts,
             'totalPosts' => $query->found_posts,
             ...$this->pagination($searchConfigs, $query, $queryParams),
         ];
+
+        // Store in transient cache
+        if ($cacheEnabled && $cacheKey) {
+            $ttl = ($searchConfigs['cache_ttl'] ?? 15) * 60;
+            set_transient($cacheKey, $result, $ttl);
+        }
+
+        return $result;
+    }
+
+    public function invalidateSearchCache($postId = null)
+    {
+        if ($postId) {
+            if (wp_is_post_revision($postId) || wp_is_post_autosave($postId)) {
+                return;
+            }
+        }
+        $this->deleteSearchTransients();
+    }
+
+    protected function deleteSearchTransients()
+    {
+        global $wpdb;
+        $wpdb->query($wpdb->prepare(
+            "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+            $wpdb->esc_like('_transient_ds_q_') . '%',
+            $wpdb->esc_like('_transient_timeout_ds_q_') . '%'
+        ));
+    }
+
+    public function invalidateTaxonomyCache()
+    {
+        delete_transient('ds_categories');
+        delete_transient('ds_tags');
+        $this->invalidateSearchCache();
     }
 
     protected function pagination($searchConfigs, $query, $params)
