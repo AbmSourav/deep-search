@@ -6,6 +6,11 @@ A custom Gutenberg advanced search block for WordPress with multi-filter support
 
 <br>
 
+## Download Production ready zip
+[Click to download](https://github.com/AbmSourav/deep-search/releases/download/1.1.0/deep-search.zip)
+
+<br>
+
 ## How It Works
 
 ### Search Flow
@@ -29,17 +34,16 @@ An admin settings page (under the "Deep Search" menu) provides two tabs:
 
 <br>
 
+![Deep Search Demo](https://pub-5fc605b04a4c467ca4a3fbed361deaf9.r2.dev/deep-search/deep-search-demo.gif)
+
+<br>
+
 ## Environment Requirements
 
 * PHP >= 8.1
 * WordPress >= 6.8
 * PHP >= 8.3 (Only for test suite)
 * NodeJS >= 22.x (Only for development env)
-
-<br>
-
-## Download Production ready zip
-[Click to download](https://github.com/AbmSourav/deep-search/releases/download/1.1.0/deep-search.zip)
 
 <br>
 
