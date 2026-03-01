@@ -2,7 +2,7 @@
 
 Search plugin for WordPress.
 
-A Gutenberg-native advanced search block for WordPress with multi-filter support (post type, category, tags) and an admin configuration panel.
+A custom Gutenberg advanced search block for WordPress with multi-filter support (post type, category, tags) and an admin configuration panel.
 
 <br>
 
@@ -60,7 +60,39 @@ npm run build:block
 
 ## Test
 
-For better test coverage, test suite need to be run on PHP-8.3. This can be done with a seperate docker container.
+Tests run inside a Docker container (`codesvault_phptest`) using PHP 8.3 and [Pest](https://pestphp.com/). The `./test` script handles syncing files to the container and executing Pest.
+
+### First-time setup
+
+Install test dependencies inside the container:
+
+```bash
+./test composer-install
+```
+
+This copies `composerTest.json` into the container as `composer.json` and runs `composer install`.
+
+### Running tests
+
+```bash
+./test
+```
+
+This syncs the `tests/` and `app/` directories to the container, then runs Pest. You can also pass Pest arguments:
+
+```bash
+./test --filter="search"
+```
+
+### Other commands
+
+| Command | Description |
+|---------|-------------|
+| `./test pest [args]` | Run Pest without syncing files first |
+| `./test copy <path>` | Copy a file/folder from host to the container |
+| `./test pull <path>` | Copy a file/folder from the container to host |
+| `./test exec <cmd>` | Execute any command inside the container |
+| `./test sync-vendor` | Copy `vendor/` from the container to `vendor-test/` for IDE support |
 
 <br>
 
