@@ -39,7 +39,7 @@ An admin settings page (under the "Deep Search" menu) provides two tabs:
 <br>
 
 ## Download Production ready zip
-[Click to download](https://github.com/AbmSourav/deep-search/releases/download/1.0.0/deep-search.zip)
+[Click to download](https://github.com/AbmSourav/deep-search/releases/download/1.1.0/deep-search.zip)
 
 <br>
 
