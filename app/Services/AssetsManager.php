@@ -49,8 +49,10 @@ class AssetsManager implements BaseService
             'ds-admin',
             'dsAdmin',
             [
-                'ajaxUrl' => admin_url('admin-ajax.php'),
-                'nonce'   => wp_create_nonce('ds_admin_nonce'),
+                'ajaxUrl'           => admin_url('admin-ajax.php'),
+                'nonce'             => wp_create_nonce('ds_admin_nonce'),
+                'currentPHPVersion' => phpversion(),
+                'minPHPVersion'     => DS_MIN_PHP_VERSION,
             ]
         );
     }

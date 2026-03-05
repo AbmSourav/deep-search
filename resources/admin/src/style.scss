@@ -96,6 +96,7 @@
             font-size: 18px;
 
             &.is-busy {
+                color: #fff;
                 background-image: linear-gradient(-45deg, #027141 33%, #0da060 0, #027141 70%, #027141 0);
             }
         }

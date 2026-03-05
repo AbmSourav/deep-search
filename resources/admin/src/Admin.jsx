@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ToggleControl, Button, Notice, TabPanel, __experimentalNumberControl as NumberControl } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 const Admin = () => {
     const [ showPagination, setShowPagination ] = useState(1)
@@ -10,8 +10,19 @@ const Admin = () => {
     const [ isSubmitting, setisSubmitting ] = useState(false)
     const [ isClearingCache, setIsClearingCache ] = useState(false)
     const [ notice, setNotice ] = useState({ show: false, type: '', message: '' });
+    const [ hasMinPHP, setHasMinPHP ] = useState(true)
 
     useEffect(() => {
+        if (dsAdmin?.currentPHPVersion < dsAdmin?.minPHPVersion) {
+            setHasMinPHP(false)
+            setNotice({
+                show: true,
+                type: 'error',
+                message: sprintf(__('Deep Search requires PHP version %s or higher. Please upgrade your PHP version.', 'deep-search'), dsAdmin?.minPHPVersion)
+            });
+            return;
+        }
+
         const form = new FormData()
         form.append('action', 'getConfigurations');
         form.append('nonce', dsAdmin.nonce);
@@ -91,6 +102,19 @@ const Admin = () => {
             console.error(error)
         })
         .finally(() => setisSubmitting(false))
+    }
+
+    if (hasMinPHP === false) {
+        return (
+            <Notice
+            status={notice.type}
+            isDismissible={false}
+            onRemove={() => setNotice({ show: false, type: '', message: '' })}
+            className='mb-4'
+            >
+                {notice.message}
+            </Notice>
+        )
     }
 
     return (
@@ -188,7 +212,7 @@ const Admin = () => {
                                 <div className="ds-configs__actions">
                                     <Button
                                     type='button'
-                                    disabled={isSubmitting}
+                                    disabled={isSubmitting || isClearingCache}
                                     isBusy={isSubmitting}
                                     className='ds-configs__save'
                                     onClick={handleSubmit}
@@ -198,7 +222,7 @@ const Admin = () => {
 
                                     <Button
                                     type='button'
-                                    disabled={isClearingCache}
+                                    disabled={isClearingCache || isSubmitting}
                                     isBusy={isClearingCache}
                                     className='ds-configs__clear-cache'
                                     onClick={handleClearCache}

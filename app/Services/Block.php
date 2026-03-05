@@ -13,7 +13,15 @@ class Block implements BaseService
 {
     public function register()
     {
+        // if minimum PHP version is not met, do not register block and return early
+        if (phpversion() < DS_MIN_PHP_VERSION) {
+            return;
+        }
+
+        // register block
         add_action('init', [$this, 'registerBlocks']);
+
+        // REST API and AJAX handlers
         add_action('rest_api_init', [$this, 'restApi']);
         add_action('wp_ajax_search', [$this, 'search']);
         add_action('wp_ajax_nopriv_search', [$this, 'search']);
@@ -349,9 +357,9 @@ class Block implements BaseService
         }
 
         return [
-            'totalPage'  => $query->max_num_pages,
-            'nextPage'   => $nextPage,
-            'prevPage'   => $prevPage,
+            'totalPage' => $query->max_num_pages,
+            'nextPage'  => $nextPage,
+            'prevPage'  => $prevPage,
         ];
     }
 }

@@ -65,7 +65,7 @@ class SearchConfigs implements BaseService
         ]);
 
         // Invalidate search cache when configs change
-        (new Block)->invalidateSearchCache();
+        (new Block())->invalidateSearchCache();
 
         wp_send_json_success([
            'message' => 'Configs stored',
@@ -145,7 +145,7 @@ class SearchConfigs implements BaseService
             ], 403);
         }
 
-        (new Block)->invalidateSearchCache();
+        (new Block())->invalidateSearchCache();
         delete_transient('ds_categories');
         delete_transient('ds_tags');
 

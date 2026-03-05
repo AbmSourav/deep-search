@@ -22,6 +22,7 @@ use DeepSearch\App\Core;
 if (! defined('ABSPATH')) exit;
 
 define('DS_VERSION', '1.1.0');
+define('DS_MIN_PHP_VERSION', '8.1');
 define('DS_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('DS_PLUGIN_URL', plugins_url('/', __FILE__));
 
