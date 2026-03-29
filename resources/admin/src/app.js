@@ -1,15 +1,15 @@
-import { createRoot } from '@wordpress/element';
+import { createRoot } from '@wordpress/element'
 
-import Admin from './Admin';
-import './style.scss';
+import Admin from './Admin'
+import './style.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('#ds-container');
+    const container = document.querySelector('#ds-container')
 
     if (container) {
-        const root = createRoot(container);
-        root.render(<Admin />);
+        const root = createRoot(container)
+        root.render(<Admin />)
     } else {
-        console.error('Container #ds-container not found!');
+        console.error('Container #ds-container not found!')
     }
-});
+})

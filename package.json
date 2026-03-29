@@ -4,6 +4,7 @@
     "description": "Search plugin for WordPress",
     "main": "index.js",
     "scripts": {
+        "format": "wp-scripts format resources/",
         "dev:admin": "wp-scripts start resources/admin/src/app.js --output-path=resources/admin/build",
         "build:admin": "wp-scripts build resources/admin/src/app.js --output-path=resources/admin/build",
         "dev:block": "wp-scripts start resources/block/src/index.js resources/block/src/view.js --output-path=resources/block/build",
@@ -18,5 +19,13 @@
     },
     "dependencies": {
         "react-select": "^5.10.2"
+    },
+    "prettier": {
+        "printWidth": 80,
+        "tabWidth": 4,
+        "useTabs": false,
+        "singleQuote": true,
+        "semi": false,
+        "trailingComma": "es5"
     }
 }

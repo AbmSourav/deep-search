@@ -1,66 +1,66 @@
 {
-  "apiVersion": 3,
-  "name": "deep-search/search-block",
-  "title": "Deep Search",
-  "category": "widgets",
-  "icon": "search",
-  "description": "Search block",
-  "attributes": {
-    "showPostType": {
-        "type": "boolean",
-        "default": true
+    "apiVersion": 3,
+    "name": "deep-search/search-block",
+    "title": "Deep Search",
+    "category": "widgets",
+    "icon": "search",
+    "description": "Search block",
+    "attributes": {
+        "showPostType": {
+            "type": "boolean",
+            "default": true
+        },
+        "showCat": {
+            "type": "boolean",
+            "default": true
+        },
+        "showTag": {
+            "type": "boolean",
+            "default": true
+        },
+        "backgroundColor": {
+            "type": "string",
+            "default": ""
+        },
+        "textColor": {
+            "type": "string",
+            "default": ""
+        },
+        "placeholderColor": {
+            "type": "string",
+            "default": ""
+        },
+        "optionsBackgroundColor": {
+            "type": "string",
+            "default": ""
+        },
+        "optionsTextColor": {
+            "type": "string",
+            "default": ""
+        },
+        "postTitleColor": {
+            "type": "string",
+            "default": ""
+        },
+        "postDateColor": {
+            "type": "string",
+            "default": ""
+        },
+        "postTitleFontSize": {
+            "type": "string",
+            "default": ""
+        },
+        "paginationBtnBg": {
+            "type": "string",
+            "default": ""
+        },
+        "paginationBtnColor": {
+            "type": "string",
+            "default": ""
+        }
     },
-    "showCat": {
-      "type": "boolean",
-      "default": true
-    },
-    "showTag": {
-      "type": "boolean",
-      "default": true
-    },
-    "backgroundColor": {
-      "type": "string",
-      "default": ""
-    },
-    "textColor": {
-      "type": "string",
-      "default": ""
-    },
-    "placeholderColor": {
-      "type": "string",
-      "default": ""
-    },
-    "optionsBackgroundColor": {
-      "type": "string",
-      "default": ""
-    },
-    "optionsTextColor": {
-      "type": "string",
-      "default": ""
-    },
-    "postTitleColor": {
-      "type": "string",
-      "default": ""
-    },
-    "postDateColor": {
-      "type": "string",
-      "default": ""
-    },
-    "postTitleFontSize": {
-      "type": "string",
-      "default": ""
-    },
-    "paginationBtnBg": {
-      "type": "string",
-      "default": ""
-    },
-    "paginationBtnColor": {
-      "type": "string",
-      "default": ""
-    }
-  },
-  "editorScript": "file:./build/index.js",
-  "viewScript": "file:./build/view.js",
-  "style": "file:./build/style-index.css",
-  "editorStyle": "file:./build/style-index.css"
+    "editorScript": "file:./build/index.js",
+    "viewScript": "file:./build/view.js",
+    "style": "file:./build/style-index.css",
+    "editorStyle": "file:./build/style-index.css"
 }
