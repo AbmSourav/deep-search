@@ -4,79 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7d598539cdf0cba7dfb030ac475f652",
+    "content-hash": "4a40df66cca78d7875b64a686b664e4d",
     "packages": [
-        {
-            "name": "codesvault/howdy-qb",
-            "version": "2.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CodesVault/howdy_qb.git",
-                "reference": "c65baa3455b32b3d24838392531ae8eb6b07d15d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CodesVault/howdy_qb/zipball/c65baa3455b32b3d24838392531ae8eb6b07d15d",
-                "reference": "c65baa3455b32b3d24838392531ae8eb6b07d15d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "pestphp/pest": "^1.23",
-                "phpcompatibility/php-compatibility": "^9.3",
-                "phpunit/phpunit": "^9.5",
-                "squizlabs/php_codesniffer": "^3.7",
-                "symfony/var-dumper": "^5.4",
-                "vlucas/phpdotenv": "^5.6",
-                "wp-coding-standards/wpcs": "^2.3",
-                "wp-phpunit/wp-phpunit": "^6.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "CodesVault\\Howdyqb\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "CodesVault",
-                    "email": "codesvault@gmail.com"
-                },
-                {
-                    "name": "Keramot UL Islam",
-                    "email": "keramotul.islam@gmail.com"
-                }
-            ],
-            "description": "Mysql Query Builder for WordPress",
-            "keywords": [
-                "builder",
-                "database",
-                "mysql",
-                "mysqli",
-                "pdo",
-                "query",
-                "query builder",
-                "wordpress",
-                "wp"
-            ],
-            "support": {
-                "issues": "https://github.com/CodesVault/howdy_qb/issues",
-                "source": "https://github.com/CodesVault/howdy_qb/tree/2.2.1"
-            },
-            "funding": [
-                {
-                    "url": "https://wise.com/pay/me/keramot-ul-i?utm_source=quick_pay",
-                    "type": "custom"
-                }
-            ],
-            "time": "2026-03-04T07:16:45+00:00"
-        },
         {
             "name": "codesvault/validator",
             "version": "1.2.2",

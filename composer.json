@@ -20,7 +20,6 @@
         "codesvault/wp-bundler": "^1.2"
     },
     "require": {
-        "codesvault/validator": "^1.2",
-        "codesvault/howdy-qb": "^2.2"
+        "codesvault/validator": "^1.2"
     }
 }
